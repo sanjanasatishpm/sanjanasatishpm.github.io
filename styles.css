@@ -1,6 +1,6 @@
 /* ============ Tokens ============ */
 /* Light: white page with black bands, black text, light sage boxes.
-   Dark: warm charcoal page with brown bands and caramel accents. */
+   Dark: midnight blue page with deeper navy bands and soft blue accents. */
 :root {
   --bg: #ffffff;
   --bg-alt: #f5f5f5;
@@ -35,49 +35,49 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #1c1814;        /* warm charcoal */
-    --bg-alt: #241e19;
-    --surface: #2f2721;   /* boxes */
-    --band-alt: #2a211b;  /* brown bands */
-    --ink: #f3ece4;
-    --ink-soft: #c4b8ab;
-    --line: #3d342c;
-    --terra: #c9a27e;     /* caramel */
-    --teal: #b89470;
-    --plum: #a8876a;
-    --mustard: #d9bfa0;
-    --sage: #a58a6e;
-    --navy: #2f2721;
-    --terra-soft: #2f2721;
-    --teal-soft: #2f2721;
-    --plum-soft: #2f2721;
-    --mustard-soft: #2f2721;
-    --sage-soft: #2f2721;
-    --on-accent: #1c1814;
+    --bg: #0f1626;        /* midnight blue */
+    --bg-alt: #131c30;
+    --surface: #1b2640;   /* boxes */
+    --band-alt: #16203a;  /* navy bands */
+    --ink: #eef2f8;
+    --ink-soft: #aab6cc;
+    --line: #26324d;
+    --terra: #9db4e0;     /* soft periwinkle */
+    --teal: #8fa9d6;
+    --plum: #8299c4;
+    --mustard: #c3d2ee;
+    --sage: #7f97c2;
+    --navy: #1b2640;
+    --terra-soft: #1b2640;
+    --teal-soft: #1b2640;
+    --plum-soft: #1b2640;
+    --mustard-soft: #1b2640;
+    --sage-soft: #1b2640;
+    --on-accent: #0f1626;
     --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 30px -12px rgba(0,0,0,.6);
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #1c1814;
-  --bg-alt: #241e19;
-  --surface: #2f2721;
-  --band-alt: #2a211b;
-  --ink: #f3ece4;
-  --ink-soft: #c4b8ab;
-  --line: #3d342c;
-  --terra: #c9a27e;
-  --teal: #b89470;
-  --plum: #a8876a;
-  --mustard: #d9bfa0;
-  --sage: #a58a6e;
-  --navy: #2f2721;
-  --terra-soft: #2f2721;
-  --teal-soft: #2f2721;
-  --plum-soft: #2f2721;
-  --mustard-soft: #2f2721;
-  --sage-soft: #2f2721;
-  --on-accent: #1c1814;
+  --bg: #0f1626;
+  --bg-alt: #131c30;
+  --surface: #1b2640;
+  --band-alt: #16203a;
+  --ink: #eef2f8;
+  --ink-soft: #aab6cc;
+  --line: #26324d;
+  --terra: #9db4e0;
+  --teal: #8fa9d6;
+  --plum: #8299c4;
+  --mustard: #c3d2ee;
+  --sage: #7f97c2;
+  --navy: #1b2640;
+  --terra-soft: #1b2640;
+  --teal-soft: #1b2640;
+  --plum-soft: #1b2640;
+  --mustard-soft: #1b2640;
+  --sage-soft: #1b2640;
+  --on-accent: #0f1626;
   --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 30px -12px rgba(0,0,0,.6);
   color-scheme: dark;
 }
