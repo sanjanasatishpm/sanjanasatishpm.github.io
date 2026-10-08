@@ -145,7 +145,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 .hero__title {
   font-family: var(--font-display);
-  font-size: clamp(32px, 4.6vw, 56px); font-weight: 700;
+  font-size: clamp(30px, 3.8vw, 44px); font-weight: 700;
   letter-spacing: -.025em; line-height: 1.08;
   color: var(--ink); margin-bottom: 28px;
 }
