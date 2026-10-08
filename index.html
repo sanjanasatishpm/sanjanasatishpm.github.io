@@ -31,6 +31,46 @@
   <main id="top">
     <!-- HERO -->
     <section class="hero">
+      <!-- Decorative marble-wave background, drawn in SVG (no image file) -->
+      <svg class="hero__marble" viewBox="0 0 1440 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+        <defs>
+          <filter id="marble" x="-20%" y="-30%" width="140%" height="160%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.003 0.011" numOctaves="4" seed="7" result="noise"/>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="70" xChannelSelector="R" yChannelSelector="G" result="warped"/>
+            <feGaussianBlur in="warped" stdDeviation="2.6"/>
+          </filter>
+          <filter id="marble-soft" x="-10%" y="-10%" width="120%" height="120%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.006 0.03" numOctaves="3" seed="3" result="noise"/>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="45" xChannelSelector="R" yChannelSelector="G" result="warped"/>
+            <feGaussianBlur in="warped" stdDeviation="5"/>
+          </filter>
+        </defs>
+        <rect class="m-base" x="-100" y="-100" width="1640" height="1000"/>
+        <g filter="url(#marble)">
+          <path class="m-a" d="M-120 140 C200 90 380 210 620 150 S1040 60 1240 130 S1400 170 1440 150 L1560 150 V900 H-120Z"/>
+          <path class="m-hi" d="M-120 215 C260 175 420 285 700 235 S1100 160 1440 225 L1560 225 V900 H-120Z"/>
+          <path class="m-b" d="M-120 260 C260 220 420 330 700 280 S1100 200 1440 270 L1560 270 V900 H-120Z"/>
+          <path class="m-hi" d="M-120 330 C180 300 400 400 660 350 S1080 280 1300 340 S1420 370 1440 360 L1560 360 V900 H-120Z"/>
+          <path class="m-c" d="M-120 375 C180 345 400 445 660 395 S1080 325 1300 385 S1420 415 1440 405 L1560 405 V900 H-120Z"/>
+          <path class="m-hi" d="M-120 450 C220 420 460 510 760 470 S1180 400 1440 460 L1560 460 V900 H-120Z"/>
+          <path class="m-a" d="M-120 500 C240 470 500 560 800 520 S1200 450 1440 510 L1560 510 V900 H-120Z"/>
+          <path class="m-hi" d="M-120 580 C300 550 520 630 820 590 S1220 540 1440 580 L1560 580 V900 H-120Z"/>
+          <path class="m-b" d="M-120 620 C300 590 520 670 820 630 S1220 580 1440 620 L1560 620 V900 H-120Z"/>
+          <path class="m-c" d="M-120 715 C260 695 560 755 860 720 S1240 675 1440 715 L1560 715 V900 H-120Z"/>
+        </g>
+        <g filter="url(#marble)" class="m-veins">
+          <path d="M-120 152 C200 102 380 222 620 162 S1040 72 1240 142 S1400 182 1440 162 L1560 162"/>
+          <path d="M-120 272 C260 232 420 342 700 292 S1100 212 1440 282 L1560 282"/>
+          <path d="M-120 388 C180 358 400 458 660 408 S1080 338 1300 398 S1420 428 1440 418 L1560 418"/>
+          <path d="M-120 512 C240 482 500 572 800 532 S1200 462 1440 522 L1560 522"/>
+          <path d="M-120 632 C300 602 520 682 820 642 S1220 592 1440 632 L1560 632"/>
+        </g>
+        <g filter="url(#marble-soft)" class="m-clouds">
+          <path d="M-120 190 C260 150 420 260 700 210 S1100 135 1440 200 L1560 200"/>
+          <path d="M-120 425 C220 395 460 485 760 445 S1180 375 1440 435 L1560 435"/>
+          <path d="M-120 555 C300 525 520 605 820 565 S1220 515 1440 555 L1560 555"/>
+        </g>
+      </svg>
       <div class="hero__inner">
         <p class="eyebrow">Product Manager · Dallas, TX</p>
         <h1 class="hero__title">
