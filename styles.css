@@ -149,6 +149,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   letter-spacing: -.025em; line-height: 1.08;
   color: var(--ink); margin-bottom: 28px;
 }
+.hero__hello { display: block; font-size: .5em; letter-spacing: -.01em; margin-bottom: 12px; color: var(--ink); }
 .hero__lede { font-size: clamp(17px, 2vw, 20px); color: var(--ink-soft); max-width: 640px; margin-bottom: 36px; }
 .hero__actions { display: flex; gap: 14px; flex-wrap: wrap; }
 
