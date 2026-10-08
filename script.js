@@ -77,9 +77,9 @@
 document.getElementById('year').textContent = new Date().getFullYear();
 
 // Contact note form → emails Sanjana via Web3Forms (https://web3forms.com)
-// Paste your free access key below. Until then, the form falls back to opening
-// the visitor's email app with the note pre-filled.
-const WEB3FORMS_ACCESS_KEY = 'YOUR_ACCESS_KEY_HERE';
+// Access key from web3forms.com (public by design; it can only send form notes to
+// Sanjana's inbox). If the key is ever removed, the form falls back to mailto.
+const WEB3FORMS_ACCESS_KEY = '5502bcbd-feeb-48f9-a8db-a43d137d9325';
 const CONTACT_EMAIL = 'sanjana.satish28@gmail.com';
 
 (function () {
