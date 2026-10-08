@@ -198,7 +198,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 .section__label::after { content: ""; flex: 0 0 48px; height: 2px; background: var(--line); }
 .section__title { font-size: clamp(32px, 4.5vw, 52px); font-weight: 700; margin-bottom: 48px; max-width: 760px; }
-.section__title em { color: var(--terra); font-style: normal; }
+.section__title em { color: inherit; font-style: normal; }
 
 /* About */
 .about__grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 64px; align-items: start; }
@@ -368,7 +368,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 .creds { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
 .creds__col { padding: 28px; border-radius: var(--radius); background: var(--surface); color: var(--ink); }
-.creds__col h3 { font-size: 22px; margin-bottom: 14px; color: var(--terra); }
+.creds__col h3 { font-size: 22px; margin-bottom: 14px; color: var(--ink); }
 .creds__col li { padding: 10px 0; border-top: 1px solid var(--line); font-size: 15px; color: var(--ink-soft); }
 .creds__col li b { color: var(--ink); }
 
@@ -424,7 +424,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 .section__label--light span { color: var(--terra); }
 .section__label--light::after { background: var(--line); }
 .contact__title { font-size: clamp(36px, 4.5vw, 56px); font-weight: 700; margin-bottom: 20px; max-width: 700px; }
-.contact__title em { color: var(--terra); font-style: normal; }
+.contact__title em { color: inherit; font-style: normal; }
 .contact__intro p { font-size: 18px; max-width: 560px; color: var(--ink-soft); margin-bottom: 32px; }
 .contact__intro p strong { color: var(--terra); font-weight: 600; }
 .contact__intro .contact__roles-label {
