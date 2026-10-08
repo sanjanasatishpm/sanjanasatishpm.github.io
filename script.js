@@ -1,3 +1,9 @@
+// Always start at the very top when the page is loaded or refreshed
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+window.scrollTo(0, 0);
+window.addEventListener('pageshow', () => window.scrollTo(0, 0));
+
 // Theme toggle (remembers choice, falls back to system preference)
 (function () {
   const root = document.documentElement;
@@ -252,6 +258,5 @@ const CONTACT_EMAIL = 'sanjana.satish28@gmail.com';
     const maxY = document.documentElement.scrollHeight - window.innerHeight;
     if (reduce) window.scrollTo(0, y);
     else scrollToY(Math.min(Math.max(y, 0), maxY));
-    history.pushState(null, '', id === '#top' ? location.pathname : id);
   });
 })();
