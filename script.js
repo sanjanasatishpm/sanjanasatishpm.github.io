@@ -15,7 +15,11 @@ window.addEventListener('pageshow', () => window.scrollTo(0, 0));
 
   toggle.addEventListener('click', () => {
     const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    // Swap instantly: turn off transitions for this one change
+    root.classList.add('theme-switching');
     root.dataset.theme = next;
+    void root.offsetHeight; // apply the new colors before transitions come back
+    setTimeout(() => root.classList.remove('theme-switching'), 50);
     try { localStorage.setItem('theme', next); } catch (e) {}
   });
 })();

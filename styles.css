@@ -141,7 +141,6 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   font-synthesis: none; /* only use real font weights, never browser-faked bold */
-  transition: background-color .3s, color .3s;
 }
 h1, h2, h3 { font-family: var(--font-display); font-weight: 700; line-height: 1.1; margin: 0; letter-spacing: -.01em; }
 p { margin: 0 0 1em; }
@@ -206,6 +205,11 @@ ul { margin: 0; padding: 0; list-style: none; }
 .hero__marble .m-c { fill: var(--marble-c); }
 .hero__marble .m-hi { fill: var(--marble-hi); }
 .hero__marble .m-veins path { fill: none; stroke: var(--marble-vein); stroke-width: 2; opacity: .4; }
+/* No marble in dark mode */
+:root[data-theme="dark"] .hero__marble { display: none; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .hero__marble { display: none; } }
+/* Switch themes instantly: pause all transitions for the moment of the swap */
+.theme-switching *, .theme-switching *::before, .theme-switching *::after { transition: none !important; }
 .hero__marble .m-clouds path { fill: none; stroke: var(--marble-hi); stroke-width: 26; opacity: .85; }
 .eyebrow {
   display: inline-block; font-weight: 600; font-size: 13px; letter-spacing: .12em; text-transform: uppercase;
