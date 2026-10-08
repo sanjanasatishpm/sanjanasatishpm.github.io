@@ -1,15 +1,16 @@
 /* ============ Tokens ============ */
-/* Minimal palette: white page, black text, light sage boxes, deeper sage accents */
+/* Light: white page with black bands, black text, light sage boxes.
+   Dark: warm charcoal page with brown bands and caramel accents. */
 :root {
-  --bg: #fbf8f1;
-  --bg-alt: #f5f1e8;
+  --bg: #ffffff;
+  --bg-alt: #f5f5f5;
   --surface: #e8efe4;  /* light sage — all boxes */
-  --band-alt: #ffffff; /* alternating white section bands */
+  --band-alt: #111111; /* alternating black section bands */
   --ink: #111111;
   --ink-soft: #3a3a3a;
   --line: #d3ddce;
 
-  /* Accents (names kept for structure; all are now sage greens) */
+  /* Accents (names kept for structure; all are sage greens in light mode) */
   --terra: #4f6b4c;    /* deep sage — primary accent */
   --teal: #6f8d6b;     /* sage */
   --plum: #5d7a5a;     /* muted sage */
@@ -34,51 +35,79 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0f110f;
-    --bg-alt: #151915;
-    --surface: #1b231b;
-    --band-alt: #151915;
-    --ink: #f1f3f0;
-    --ink-soft: #b5bdb2;
-    --line: #2a342a;
-    --terra: #a9c3a3;
-    --teal: #9fbb99;
-    --plum: #93b08d;
-    --mustard: #c5d8bf;
-    --sage: #8fae89;
-    --navy: #1b231b;
-    --terra-soft: #1b231b;
-    --teal-soft: #1b231b;
-    --plum-soft: #1b231b;
-    --mustard-soft: #1b231b;
-    --sage-soft: #1b231b;
-    --on-accent: #0f110f;
+    --bg: #1c1814;        /* warm charcoal */
+    --bg-alt: #241e19;
+    --surface: #2f2721;   /* boxes */
+    --band-alt: #2a211b;  /* brown bands */
+    --ink: #f3ece4;
+    --ink-soft: #c4b8ab;
+    --line: #3d342c;
+    --terra: #c9a27e;     /* caramel */
+    --teal: #b89470;
+    --plum: #a8876a;
+    --mustard: #d9bfa0;
+    --sage: #a58a6e;
+    --navy: #2f2721;
+    --terra-soft: #2f2721;
+    --teal-soft: #2f2721;
+    --plum-soft: #2f2721;
+    --mustard-soft: #2f2721;
+    --sage-soft: #2f2721;
+    --on-accent: #1c1814;
     --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 30px -12px rgba(0,0,0,.6);
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #0f110f;
-  --bg-alt: #151915;
-  --surface: #1b231b;
-  --band-alt: #151915;
-  --ink: #f1f3f0;
-  --ink-soft: #b5bdb2;
-  --line: #2a342a;
+  --bg: #1c1814;
+  --bg-alt: #241e19;
+  --surface: #2f2721;
+  --band-alt: #2a211b;
+  --ink: #f3ece4;
+  --ink-soft: #c4b8ab;
+  --line: #3d342c;
+  --terra: #c9a27e;
+  --teal: #b89470;
+  --plum: #a8876a;
+  --mustard: #d9bfa0;
+  --sage: #a58a6e;
+  --navy: #2f2721;
+  --terra-soft: #2f2721;
+  --teal-soft: #2f2721;
+  --plum-soft: #2f2721;
+  --mustard-soft: #2f2721;
+  --sage-soft: #2f2721;
+  --on-accent: #1c1814;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 30px -12px rgba(0,0,0,.6);
+  color-scheme: dark;
+}
+
+/* Light mode: the black bands flip to light text and dark boxes */
+:root[data-theme="light"] :is(#about, #projects, #skills) {
+  --ink: #f5f5f2;
+  --ink-soft: #c9c9c4;
+  --line: #2e2e2e;
+  --surface: #1e1e1e;
+  --bg: #111111;
   --terra: #a9c3a3;
   --teal: #9fbb99;
   --plum: #93b08d;
   --mustard: #c5d8bf;
   --sage: #8fae89;
-  --navy: #1b231b;
-  --terra-soft: #1b231b;
-  --teal-soft: #1b231b;
-  --plum-soft: #1b231b;
-  --mustard-soft: #1b231b;
-  --sage-soft: #1b231b;
-  --on-accent: #0f110f;
-  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 30px -12px rgba(0,0,0,.6);
-  color-scheme: dark;
+  --on-accent: #111111;
+  color: var(--ink);
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) :is(#about, #projects, #skills) {
+    --ink: #f5f5f2;
+    --ink-soft: #c9c9c4;
+    --line: #2e2e2e;
+    --surface: #1e1e1e;
+    --bg: #111111;
+    --terra: #a9c3a3;
+    --on-accent: #111111;
+    color: var(--ink);
+  }
 }
 
 /* ============ Base ============ */
@@ -192,7 +221,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 /* ============ Sections ============ */
 .section { max-width: var(--max); margin: 0 auto; padding: 100px 16px; }
-/* Alternate full-width background bands: cream (page) / white */
+/* Alternate full-width background bands: page color / --band-alt (black in light, brown in dark) */
 #about, #projects, #skills {
   background: var(--band-alt);
   box-shadow: 0 0 0 100vmax var(--band-alt);
