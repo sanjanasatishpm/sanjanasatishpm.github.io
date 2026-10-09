@@ -277,6 +277,6 @@ const CONTACT_EMAIL = 'sanjana.satish28@gmail.com';
     board.classList.toggle('is-open', open);
     stack.setAttribute('aria-expanded', String(open));
     label.textContent = open ? 'Put back' : 'Click me!';
-    sub.textContent = open ? 'tap to tidy up' : '8 notes inside';
+    sub.textContent = open ? 'tap to tidy up' : '9 notes inside';
   });
 })();

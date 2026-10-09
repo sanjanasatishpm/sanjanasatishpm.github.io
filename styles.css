@@ -485,7 +485,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 .notes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; width: 100%; }
 .note {
   aspect-ratio: 1; display: grid; place-items: center; text-align: center; padding: 10px;
-  border-radius: 3px; color: #222;
+  border-radius: 3px; color: #222; overflow-wrap: break-word;
   font-family: "Caveat", cursive; font-weight: 700; font-size: 23px; line-height: 1.05;
   box-shadow: 0 8px 14px -6px rgba(0, 0, 0, .35);
   /* hidden until the stack is clicked: notes fly in from the desk on the left */
@@ -501,8 +501,11 @@ ul { margin: 0; padding: 0; list-style: none; }
 .note:nth-child(6) { --i: 5; --r: 1.5deg; }
 .note:nth-child(7) { --i: 6; --r: -2.5deg; }
 .note:nth-child(8) { --i: 7; --r: 2deg; }
-/* Certifications note: a heading plus three short lines */
-.note--certs { overflow-wrap: anywhere; display: flex; flex-direction: column; justify-content: center; gap: 2px; font-size: 17px; line-height: 1.1; }
+.note:nth-child(9) { --i: 8; --r: -1.5deg; }
+/* Notes that list a few items, one per line */
+.note--list { display: flex; flex-direction: column; justify-content: center; gap: 4px; }
+/* Certifications note: a heading plus three short lines, slightly smaller */
+.note--certs { overflow-wrap: anywhere; gap: 2px; font-size: 17px; line-height: 1.1; }
 .note__title { font-size: 21px; text-decoration: underline; text-underline-offset: 3px; margin-bottom: 3px; }
 .board.is-open .note { opacity: 1; transform: rotate(var(--r)); }
 .board.is-open .note:hover { transform: rotate(0) scale(1.05); transition-delay: 0ms; }
