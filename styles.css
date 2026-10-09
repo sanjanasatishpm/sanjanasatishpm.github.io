@@ -429,20 +429,83 @@ ul { margin: 0; padding: 0; list-style: none; }
 .vine__card li { position: relative; padding-left: 20px; margin-top: 8px; color: var(--ink-soft); font-size: 15px; }
 .vine__card li::before { content: "→"; position: absolute; left: 0; color: var(--stage); }
 
-/* Skills */
-.skills__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-.skillset { padding: 28px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); }
-.skillset h3 { font-size: 22px; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
-.skillset h3::before { content: ""; width: 14px; height: 14px; border-radius: 4px; background: var(--sk); }
-.skillset--terra { --sk: var(--terra); --sk-soft: var(--terra-soft); }
-.skillset--teal { --sk: var(--teal); --sk-soft: var(--teal-soft); }
-.skillset--plum { --sk: var(--plum); --sk-soft: var(--plum-soft); }
-.skillset--mustard { --sk: var(--mustard); --sk-soft: var(--mustard-soft); }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.chips li {
-  font-size: 14px; font-weight: 500; padding: 7px 14px; border-radius: 999px;
-  background: var(--bg); color: var(--ink);
+/* What I bring to the table: desk photo + sticky-note board */
+.table { display: grid; grid-template-columns: 1.15fr 1fr; gap: 28px; align-items: stretch; }
+.desk {
+  position: relative; min-height: 420px; border-radius: var(--radius); overflow: hidden;
+  background: #3b2a20 url("https://images.unsplash.com/photo-1437419764061-2473afe69fc2?q=80&w=1400&auto=format&fit=crop") center / cover no-repeat;
+  box-shadow: var(--shadow);
 }
+.desk__credit {
+  position: absolute; right: 12px; bottom: 10px; font-size: 11px; color: rgba(255, 255, 255, .7); text-decoration: none;
+}
+.desk__credit:hover { color: #fff; }
+
+/* The stack of sticky notes sitting on the desk */
+.stack {
+  position: absolute; left: 50%; top: 50%; width: 150px; height: 150px; transform: translate(-50%, -50%);
+  border: 0; padding: 0; background: none; cursor: pointer; font: inherit;
+}
+.stack__sheet {
+  position: absolute; inset: 0; border-radius: 3px;
+  background: #f4e3a1; box-shadow: 0 10px 18px -6px rgba(0, 0, 0, .55);
+  transition: transform .35s ease;
+}
+.stack__sheet--3 { transform: rotate(-8deg) translate(-6px, 6px); background: #d9e6d2; }
+.stack__sheet--2 { transform: rotate(5deg) translate(5px, 3px); background: #f3d2cf; }
+.stack__sheet--1 {
+  transform: rotate(-2deg);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  font-family: "Caveat", cursive; color: #2a2a2a;
+}
+.stack__label { font-size: 30px; font-weight: 700; line-height: 1; }
+.stack__sub { font-size: 18px; font-weight: 600; opacity: .7; }
+.stack:hover .stack__sheet--1, .stack:focus-visible .stack__sheet--1 { transform: rotate(-4deg) translateY(-6px); }
+.stack:hover .stack__sheet--2 { transform: rotate(8deg) translate(8px, 2px); }
+.stack:focus-visible { outline: 3px solid #fff; outline-offset: 10px; border-radius: 6px; }
+/* gentle wiggle to invite a click until it's used */
+.stack:not([aria-expanded="true"]) { animation: stack-nudge 3.2s ease-in-out 1.5s infinite; }
+@keyframes stack-nudge {
+  0%, 86%, 100% { transform: translate(-50%, -50%) rotate(0); }
+  90% { transform: translate(-50%, -50%) rotate(-4deg); }
+  95% { transform: translate(-50%, -50%) rotate(3deg); }
+}
+
+/* The board where the notes land */
+.board {
+  position: relative; border-radius: var(--radius); padding: 28px;
+  background: var(--surface); border: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: center; min-height: 420px;
+}
+.board__hint {
+  position: absolute; inset: 0; margin: 0; display: grid; place-items: center; padding: 32px; text-align: center;
+  font-family: "Caveat", cursive; font-size: 26px; color: var(--ink-soft); transition: opacity .3s ease;
+}
+.board.is-open .board__hint { opacity: 0; pointer-events: none; }
+.notes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; width: 100%; }
+.note {
+  aspect-ratio: 1; display: grid; place-items: center; text-align: center; padding: 10px;
+  border-radius: 3px; color: #222;
+  font-family: "Caveat", cursive; font-weight: 700; font-size: 23px; line-height: 1.05;
+  box-shadow: 0 8px 14px -6px rgba(0, 0, 0, .35);
+  /* hidden until the stack is clicked: notes fly in from the desk on the left */
+  opacity: 0; transform: translate(-140px, 30px) rotate(-25deg) scale(.6);
+  transition: opacity .45s ease, transform .6s cubic-bezier(.2, 1.3, .4, 1);
+  transition-delay: calc(var(--i, 0) * 110ms);
+}
+.note:nth-child(1) { --i: 0; --r: -3deg; }
+.note:nth-child(2) { --i: 1; --r: 2deg; }
+.note:nth-child(3) { --i: 2; --r: -1deg; }
+.note:nth-child(4) { --i: 3; --r: 3deg; }
+.note:nth-child(5) { --i: 4; --r: -2deg; }
+.note:nth-child(6) { --i: 5; --r: 1.5deg; }
+.note:nth-child(7) { --i: 6; --r: -2.5deg; }
+.board.is-open .note { opacity: 1; transform: rotate(var(--r)); }
+.board.is-open .note:hover { transform: rotate(0) scale(1.05); transition-delay: 0ms; }
+.note--yellow { background: #f4e3a1; }
+.note--sage { background: #d9e6d2; }
+.note--blue { background: #d6e3f0; }
+.note--pink { background: #f3d2cf; }
 
 .creds { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
 .creds__col { padding: 28px; border-radius: var(--radius); background: var(--surface); color: var(--ink); }
@@ -543,6 +606,8 @@ ul { margin: 0; padding: 0; list-style: none; }
   .reveal { opacity: 1; transform: none; transition: none; }
   .card, .btn { transition: none; }
   .vine__stem, .bud, .leaf, .seed, .flower { transition: none; }
+  .note, .stack__sheet { transition: none; }
+  .stack { animation: none !important; }
 }
 
 /* ============ Responsive ============ */
@@ -554,7 +619,14 @@ ul { margin: 0; padding: 0; list-style: none; }
 @media (max-width: 760px) {
   .nav__links a:not(.nav__cta) { display: none; }
   .hero { padding-top: 64px; padding-bottom: 90px; }
-  .cards, .skills__grid, .creds, .projects__grid { grid-template-columns: 1fr; }
+  .cards, .creds, .projects__grid, .table { grid-template-columns: 1fr; }
+  .desk { min-height: 300px; }
+  .board { min-height: 0; padding: 20px; }
+  .board__hint { position: static; padding: 24px 8px; }
+  .board:not(.is-open) .notes { display: none; }
+  .board.is-open .board__hint { display: none; }
+  .notes { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .note { font-size: 17px; padding: 6px; }
   .project { padding: 28px 24px; }
   .card { padding: 28px 24px; }
   .vine__item { grid-template-columns: 44px 1fr; margin-bottom: 32px; }

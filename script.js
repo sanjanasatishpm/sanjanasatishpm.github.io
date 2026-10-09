@@ -38,7 +38,7 @@ window.addEventListener('pageshow', () => window.scrollTo(0, 0));
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const targets = document.querySelectorAll(
     '.hero__inner > *, .stat, .section__label, .section__title, .about__body, .card, .project, ' +
-    '.vine__card, .skillset, .creds__col, .contact__intro, .note-form'
+    '.vine__card, .desk, .board, .creds__col, .contact__intro, .note-form'
   );
   if (reduce || !('IntersectionObserver' in window)) return;
 
@@ -262,5 +262,21 @@ const CONTACT_EMAIL = 'sanjana.satish28@gmail.com';
     const maxY = document.documentElement.scrollHeight - window.innerHeight;
     if (reduce) window.scrollTo(0, y);
     else scrollToY(Math.min(Math.max(y, 0), maxY));
+  });
+})();
+
+// "What I bring to the table": click the sticky-note stack to post the notes on the board
+(function () {
+  const stack = document.querySelector('.stack');
+  const board = document.getElementById('board');
+  if (!stack || !board) return;
+  const label = stack.querySelector('.stack__label');
+  const sub = stack.querySelector('.stack__sub');
+  stack.addEventListener('click', () => {
+    const open = !board.classList.contains('is-open');
+    board.classList.toggle('is-open', open);
+    stack.setAttribute('aria-expanded', String(open));
+    label.textContent = open ? 'Put back' : 'Click me!';
+    sub.textContent = open ? 'tap to tidy up' : '7 notes inside';
   });
 })();
