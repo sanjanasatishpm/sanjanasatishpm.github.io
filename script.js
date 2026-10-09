@@ -38,12 +38,12 @@ window.addEventListener('pageshow', () => window.scrollTo(0, 0));
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const targets = document.querySelectorAll(
     '.hero__inner > *, .stat, .section__label, .section__title, .about__body, .card, .project, ' +
-    '.vine__card, .desk, .board, .creds__col, .contact__intro, .note-form'
+    '.vine__card, .desk, .board, .contact__intro, .note-form'
   );
   if (reduce || !('IntersectionObserver' in window)) return;
 
   // Stagger items that sit side by side in the same grid row
-  const staggerGroups = ['.hero__inner', '.stats', '.cards', '.projects__grid', '.skills__grid', '.creds', '.contact__inner'];
+  const staggerGroups = ['.hero__inner', '.stats', '.cards', '.projects__grid', '.contact__inner'];
   targets.forEach((el) => {
     el.classList.add('reveal');
     const group = el.parentElement;
@@ -277,6 +277,6 @@ const CONTACT_EMAIL = 'sanjana.satish28@gmail.com';
     board.classList.toggle('is-open', open);
     stack.setAttribute('aria-expanded', String(open));
     label.textContent = open ? 'Put back' : 'Click me!';
-    sub.textContent = open ? 'tap to tidy up' : '7 notes inside';
+    sub.textContent = open ? 'tap to tidy up' : '8 notes inside';
   });
 })();
