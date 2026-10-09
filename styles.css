@@ -629,10 +629,12 @@ ul { margin: 0; padding: 0; list-style: none; }
   .hero { padding-top: 64px; padding-bottom: 90px; }
   .cards, .projects__grid, .table { grid-template-columns: 1fr; }
   .desk { min-height: 300px; }
-  .board { min-height: 0; padding: 20px; }
-  .board__hint { position: static; padding: 24px 8px; }
-  .board:not(.is-open) .notes { display: none; }
-  .board.is-open .board__hint { display: none; }
+  .board { min-height: 0; padding: 16px; }
+  .board__hint { font-size: 22px; }
+  .stack { width: 130px; height: 130px; }
+  .stack__label { font-size: 26px; }
+  .stack__sub { font-size: 16px; }
+  .note { transform: translate(-40px, -60px) rotate(-20deg) scale(.6); }
   .notes { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
   .note { font-size: 17px; padding: 6px; }
   .note--certs { font-size: 13px; }
