@@ -1,0 +1,9 @@
+{
+  "name": "sanjana-portfolio",
+  "private": true,
+  "type": "module",
+  "description": "Personal portfolio site plus the Executive Leadership Brief app (4-blocker/) and its Vercel API (api/).",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.128.0"
+  }
+}

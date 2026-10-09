@@ -1,0 +1,631 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Executive Leadership Brief · Sanjana Satish</title>
+<meta name="description" content="Turn meeting notes, Jira exports and emails into a one-slide executive 4-blocker you can edit and save as a PDF.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23191715'/><g fill='%23e4e1dd'><rect x='14' y='14' width='16' height='16' rx='3'/><rect x='34' y='14' width='16' height='16' rx='3'/><rect x='14' y='34' width='16' height='16' rx='3'/><rect x='34' y='34' width='16' height='16' rx='3'/></g></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: centered title block → action row → warm-dark 16:9 slide → panels. Single deliberate warm-dark look in every theme. */
+:root{
+  --bg:#110f0e; --surface:#1a1816; --surface-2:#24211e; --fg:#e4e1dd; --muted:#a39a90; --line:#2e2a26;
+  --accent:#d9d6d2; --accent-ink:#161412; --accent-soft:rgba(217,214,210,.12);
+  --btn:#e4e1dd; --btn-hover:#f2f0ed; --btn-ink:#1a1816;
+  --slide:#191715; --slide-ink:#e4e1dd; --slide-muted:#9c9389; --slide-line:#2d2925;
+  --sage:#8fd19e; --sky:#7fb8ff; --rose:#f28fad; --lilac:#c3a6ff; --amber:#f0d070; --red:#ff7a7a; --grey:#9c9389;
+  --green:var(--sage); --blue:var(--sky); --violet:var(--lilac);
+  --display:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --r:10px; color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+img{max-width:100%}
+body{margin:0}
+.back{position:absolute;top:16px;left:16px;font-size:13px;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:999px}
+.back:hover{color:var(--fg);background:var(--surface)}
+.wrap{position:relative}
+html{background:var(--bg)}
+body{background:radial-gradient(1100px 520px at 50% -260px, rgba(255,255,255,.05), transparent 70%), var(--bg);
+  color:var(--fg);font-family:var(--body);font-size:14px;line-height:1.5;min-height:100vh}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:36px 56px;display:flex;flex-direction:column;gap:20px}
+button,select,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* title block */
+.hero{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--muted);background:var(--surface);border:1px solid var(--line);padding:4px 12px;border-radius:999px}
+.eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--sage)}
+.hero h1{margin:0;color:var(--btn);font-family:var(--display);font-weight:700;font-size:clamp(24px,3.6vw,36px);line-height:1.1;letter-spacing:-.015em;text-wrap:balance}
+.hero .wk{font-size:14px;color:var(--muted)}
+.hero .wk b{color:var(--fg);font-weight:600}
+.tube{display:none}
+
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;justify-content:center}
+.btn{border:1px solid var(--btn);background:var(--btn);color:var(--btn-ink);border-radius:999px;padding:9px 16px;cursor:pointer;font-weight:600;font-size:13px;display:inline-flex;align-items:center;gap:6px;transition:background .15s,border-color .15s}
+.btn:hover{background:var(--btn-hover);border-color:var(--btn-hover)}
+.btn.primary{font-weight:700}
+.btn.primary:hover{background:#ffffff;border-color:#ffffff}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+#history{background:#ffffff;border-color:#ffffff;color:var(--btn-ink)}
+select.btn option{background:var(--btn);color:var(--btn-ink)}
+.toast{font-size:13px;color:var(--muted);min-height:1em;text-align:center}
+
+/* slide */
+.stage{overflow-x:auto;padding-block:4px 8px}
+.slide{background:var(--slide);color:var(--slide-ink);aspect-ratio:16/9;width:100%;min-width:760px;border:1px solid var(--slide-line);border-radius:16px;display:grid;grid-template-rows:auto 1fr auto;overflow:hidden;position:relative;
+  box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 24px 60px -20px rgba(0,0,0,.7)}
+.s-head{padding:20px 24px 16px;border-bottom:1px solid var(--slide-line);display:grid;grid-template-columns:1fr minmax(0,3fr) 1fr;align-items:center;gap:12px;
+  background:linear-gradient(180deg,rgba(255,255,255,.03),transparent)}
+.s-center{grid-column:2;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;min-width:0}
+.s-title{font-family:var(--display);font-weight:700;font-size:clamp(20px,2.5vw,30px);letter-spacing:-.015em;line-height:1.05;text-wrap:balance}
+.s-title.ph{color:var(--slide-muted)}
+.s-meta{font-size:12px;color:var(--slide-muted);display:flex;gap:18px;flex-wrap:wrap;justify-content:center}
+.s-meta b{color:var(--slide-ink);font-weight:600}
+.rag{grid-column:3;justify-self:end;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.rag-label{font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--slide-muted)}
+.rag-pills{display:flex;flex-direction:column;gap:4px;align-items:stretch}
+.rag-pills button{border:1px solid var(--slide-line);background:transparent;color:var(--slide-muted);border-radius:999px;padding:3px 11px;font-size:11px;font-weight:600;cursor:pointer}
+.rag-pills button:hover{border-color:#45403a}
+.rag-pills button[aria-pressed="true"].g{background:rgba(143,209,158,.16);border-color:transparent;color:var(--sage)}
+.rag-pills button[aria-pressed="true"].y{background:rgba(245,194,107,.16);border-color:transparent;color:var(--amber)}
+.rag-pills button[aria-pressed="true"].r{background:rgba(255,122,122,.16);border-color:transparent;color:var(--red)}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;min-height:0;gap:1px;background:var(--slide-line)}
+.q{--c:var(--sky);background:var(--slide);padding:14px 22px 12px;display:flex;flex-direction:column;gap:8px;min-height:0;min-width:0;overflow:hidden}
+.q[data-k="accomplishments"]{--c:var(--sage)} .q[data-k="upcoming"]{--c:var(--sky)} .q[data-k="risks"]{--c:var(--rose)} .q[data-k="jira"]{--c:var(--lilac)}
+.q-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.q-h h2{margin:0;font-family:var(--display);font-weight:700;font-size:clamp(12px,1.25vw,15px);letter-spacing:-.005em;display:flex;align-items:center;gap:9px}
+.q-h h2 i{display:inline-block;width:22px;height:22px;border-radius:7px;background:color-mix(in srgb,var(--c) 18%,transparent);position:relative;flex:none}
+.q-h h2 i::after{content:"";position:absolute;inset:7px;border-radius:50%;background:var(--c)}
+.add{border:0;background:none;color:var(--slide-muted);font-size:12px;font-weight:600;cursor:pointer;padding:2px 9px;border-radius:999px}
+.add:hover{background:var(--surface-2);color:var(--slide-ink)}
+ul.items{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;overflow:auto;min-height:0}
+ul.items li{display:grid;grid-template-columns:10px 1fr auto auto;gap:7px;align-items:baseline;font-size:clamp(11px,1.12vw,13.5px);line-height:1.38}
+ul.items li::before{content:"";width:5px;height:5px;background:var(--c);border-radius:50%;transform:translateY(-2px)}
+ul.items.kinds li{grid-template-columns:auto 1fr auto auto}
+ul.items.kinds li::before,ul.items.jira li::before{display:none}
+ul.items.jira li{grid-template-columns:auto 1fr auto auto}
+.it{outline:none;min-width:0;border-radius:4px}
+.it:hover,.tag:hover,.key:hover{background:var(--surface-2)}
+.it:focus,.tag:focus,.key:focus{background:var(--accent-soft)}
+.tag,.key{font-family:var(--mono);font-size:.78em;color:var(--slide-muted);white-space:nowrap;outline:none;padding:0 4px;border-radius:4px}
+.key{color:var(--slide-ink);font-weight:500;font-size:.8em;background:var(--surface-2)}
+.pill{appearance:none;-webkit-appearance:none;border:0;border-radius:999px;font-size:.72em;font-weight:600;padding:2px 9px;cursor:pointer;text-align:center;background:color-mix(in srgb,currentColor 16%,transparent)}
+.pill option{background:var(--surface);color:var(--fg)}
+.k-risk{color:var(--rose)} .k-issue{color:var(--amber)} .k-decision{color:var(--sky)}
+.st-done{color:var(--sage)} .st-progress{color:var(--sky)} .st-review{color:var(--lilac)} .st-blocked{color:var(--red)} .st-todo{color:var(--grey)}
+.tag.sev-high{color:var(--red)} .tag.sev-med{color:var(--amber)} .tag.sev-low{color:var(--sage)}
+.jp{display:inline-flex;align-items:center;gap:6px;margin-left:auto;margin-right:4px}
+.jp select{appearance:none;-webkit-appearance:none;border:0;border-radius:999px;font-size:11px;font-weight:600;padding:3px 10px;cursor:pointer;background:color-mix(in srgb,currentColor 16%,transparent)}
+.jp select option{background:var(--surface);color:var(--fg)}
+.jp .jp-none{color:var(--grey)} .jp .jp-complete{color:var(--sage)} .jp .jp-na{color:var(--grey)} .jp .jp-open{color:var(--amber)}
+.jp input{width:46px;border:1px solid var(--slide-line);background:var(--surface-2);border-radius:6px;padding:1px 6px;font-size:11px;font-weight:600;text-align:center}
+.jp span{font-size:11px;color:var(--slide-muted)}
+.del{border:0;background:none;color:transparent;cursor:pointer;font-size:13px;line-height:1;padding:0 2px}
+li:hover .del,.del:focus{color:var(--slide-muted)}
+.empty{font-size:12px;color:var(--slide-muted);font-style:italic}
+.s-foot{border-top:1px solid var(--slide-line);padding:7px 22px;font-size:10.5px;color:var(--slide-muted);display:flex;justify-content:space-between;gap:16px}
+.s-foot span:first-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+
+/* details + composer */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.panel h3{margin:0;font-family:var(--display);font-size:17px;font-weight:700;letter-spacing:-.01em}
+.fields{display:grid;grid-template-columns:2fr 1.2fr 1fr 1fr;gap:12px}
+@media (max-width:700px){.fields{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field label{font-size:12px;font-weight:600;color:var(--muted)}
+.field input,.field select,textarea#prompt{border:1px solid var(--line);border-radius:var(--r);padding:10px 12px;background:var(--bg);width:100%;transition:border-color .15s,box-shadow .15s}
+.field input:focus,.field select:focus,textarea#prompt:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px var(--accent-soft)}
+p.hint{margin:0;color:var(--muted);font-size:13px;max-width:72ch}
+textarea#prompt{min-height:140px;resize:vertical;line-height:1.5}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.row .left,.row .right{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12px;background:var(--surface-2);border-radius:999px;padding:3px 6px 3px 11px;display:inline-flex;align-items:center;gap:4px;max-width:100%}
+.chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px}
+.chip button{border:0;background:none;cursor:pointer;color:var(--muted);padding:0 4px}
+.mode{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px}
+.mode label{padding:5px 12px;cursor:pointer;font-size:12.5px;border-radius:999px;color:var(--muted)}
+.mode input{position:absolute;opacity:0;pointer-events:none}
+.mode label:has(input:checked){background:var(--surface-2);color:var(--fg);font-weight:600}
+.status{font-size:13px;color:var(--muted)}
+.status.err{color:var(--red)}
+.drop{border:1px dashed #3d3833;border-radius:999px;padding:7px 14px;cursor:pointer;color:var(--muted);font-size:12.5px}
+.drop:hover,.drop.over{border-color:var(--accent);color:var(--accent)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../#projects">← Portfolio</a>
+  <header class="hero" style="padding-top:28px">
+    <span class="eyebrow">4-Blocker</span>
+    <h1>Executive Leadership Brief</h1>
+    <span class="wk" id="wkLabel"></span>
+  </header>
+  <nav class="bar" aria-label="Slide actions">
+    <select class="btn" id="history" aria-label="Past 4-blockers"><option value="">History</option></select>
+    <button class="btn" id="newBtn" type="button">New blank</button>
+    <button class="btn" id="saveBtn" type="button">Save to history</button>
+    <button class="btn primary" id="pdfBtn" type="button">Save as PDF</button>
+  </nav>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <div class="stage">
+    <section class="slide" id="slide" aria-label="4-blocker slide">
+      <div class="s-head">
+        <div class="s-center">
+          <div class="s-title" id="sTitle"></div>
+          <div class="s-meta">
+            <span>Report date <b id="sWeek"></b></span>
+            <span>Owner <b id="sOwner"></b></span>
+          </div>
+        </div>
+        <div class="rag">
+          <span class="rag-label">Overall status</span>
+          <div class="rag-pills" id="rag">
+            <button type="button" class="g" data-v="green">On track</button>
+            <button type="button" class="y" data-v="yellow">At risk</button>
+            <button type="button" class="r" data-v="red">Off track</button>
+          </div>
+        </div>
+      </div>
+      <div class="grid" id="grid"></div>
+      <div class="s-foot"><span id="fSources"></span></div>
+    </section>
+  </div>
+
+  <section class="panel" aria-labelledby="dTitle">
+    <h3 id="dTitle">Slide details</h3>
+    <div class="fields">
+      <div class="field"><label for="inTitle">4-blocker title</label><input id="inTitle" type="text" placeholder="Project or product name" autocomplete="off"></div>
+      <div class="field"><label for="inOwner">Owner</label><input id="inOwner" type="text" placeholder="Who owns this update" autocomplete="off"></div>
+      <div class="field"><label for="inDay">Report day</label><select id="inDay">
+        <option value="1">Monday</option><option value="2">Tuesday</option><option value="3">Wednesday</option><option value="4">Thursday</option><option value="5">Friday</option><option value="6">Saturday</option><option value="0">Sunday</option>
+      </select></div>
+      <div class="field"><label for="inDate">Report date</label><input id="inDate" type="date"></div>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="cTitle">
+    <h3 id="cTitle">Build this week's 4-blocker</h3>
+    <p class="hint">Paste meeting notes, Jira exports, Confluence pages or email threads, or just describe the week. Claude fills in accomplishments, the next two weeks, risks / issues / decisions, and Jira ticket status. Click anything on the slide to edit it afterwards.</p>
+    <textarea id="prompt" placeholder="Paste meeting notes, emails, Confluence pages or Jira exports, or describe what happened this week."></textarea>
+    <div class="chips" id="fileChips"></div>
+    <div class="row">
+      <div class="left">
+        <label class="drop" id="drop" for="fileIn">Attach files (.docx, .txt, .md, .csv, .json, .vtt, .eml)</label>
+        <input type="file" id="fileIn" multiple hidden accept=".docx,.txt,.md,.csv,.json,.vtt,.eml,.html,.htm,.log">
+        <div class="mode" role="radiogroup" aria-label="How to apply">
+          <label><input type="radio" name="mode" id="modeReplace" value="replace" checked><span>Replace slide</span></label>
+          <label><input type="radio" name="mode" id="modeMerge" value="merge"><span>Merge into slide</span></label>
+        </div>
+      </div>
+      <div class="right">
+        <span class="status" id="genStatus"></span>
+        <button class="btn" id="stopBtn" type="button" hidden>Stop</button>
+        <button class="btn primary" id="genBtn" type="button">Generate 4-blocker</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+const BLOCKS = [
+  {k:"accomplishments", title:"Accomplishments this week", tagHint:"date / ticket"},
+  {k:"upcoming", title:"Next two weeks", tagHint:"due date"},
+  {k:"risks", title:"Risks, issues & decisions", tagHint:"High / Med / Low, or who · by when"},
+  {k:"jira", title:"Jira tickets", tagHint:""},
+];
+const KINDS = [["risk","Risk"],["issue","Issue"],["decision","Decision"]];
+const STATUSES = [["To Do","st-todo"],["In Progress","st-progress"],["In Review","st-review"],["Blocked","st-blocked"],["Done","st-done"]];
+const stClass = s => (STATUSES.find(x => x[0].toLowerCase() === String(s||"").toLowerCase()) || STATUSES[0])[1];
+const normStatus = s => { const t = String(s||"").toLowerCase();
+  if (/done|closed|resolved|complete/.test(t)) return "Done";
+  if (/block/.test(t)) return "Blocked";
+  if (/review|qa|test/.test(t)) return "In Review";
+  if (/progress|doing|dev/.test(t)) return "In Progress";
+  return "To Do"; };
+const normKind = k => { const t = String(k||"").toLowerCase(); return t.startsWith("d") ? "decision" : t.startsWith("i") ? "issue" : "risk"; };
+
+// The weekday this team reports on; remembered per viewer.
+let reportDay = 5;
+try { const v = localStorage.getItem("reportDay"); if (v !== null && /^[0-6]$/.test(v)) reportDay = Number(v); } catch {}
+function nextReportDate(d = new Date()){
+  const x = new Date(d); x.setDate(x.getDate() + (reportDay - x.getDay() + 7) % 7);
+  return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,"0")}-${String(x.getDate()).padStart(2,"0")}`;
+}
+function fmtDate(iso){
+  const d = new Date(iso + "T12:00:00");
+  return isNaN(d) ? (iso || "—") : d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"});
+}
+const slug = s => (s||"project").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,40) || "project";
+const emptyBlocks = () => ({accomplishments:[],upcoming:[],risks:[],jira:[]});
+
+const emptyJira = () => ({status:"", left:null});
+let state = {project:"", owner:"", weekEnding: nextReportDate(), status:"", blocks: emptyBlocks(), jiraProgress: emptyJira(), sources:[], generatedBy:"manual"};
+function cleanJira(v, tickets){
+  const st = ["complete","na","open"].includes(v?.status) ? v.status : "";
+  const raw = v?.ticketsLeft ?? v?.left;
+  let left = raw === null || raw === undefined || raw === "" || !Number.isFinite(Number(raw)) ? null : Math.max(0, Math.round(Number(raw)));
+  if (st === "open" && left === null && tickets) left = tickets.filter(t => normStatus(t.status) !== "Done").length;
+  return {status: st, left: st === "open" ? left : null};
+}
+function jiraLabel(j){
+  if (j?.status === "complete") return "Complete";
+  if (j?.status === "na") return "N/A";
+  if (j?.status === "open") return j.left === null ? "Tickets left" : `${j.left} ticket${j.left === 1 ? "" : "s"} left`;
+  return "";
+}
+let attachments = [];
+let currentDocId = null;
+
+function toast(msg){ $("toast").textContent = msg; clearTimeout(toast.t); toast.t = setTimeout(()=>{$("toast").textContent=""},5000); }
+
+/* ---------- render ---------- */
+function syncFields(){
+  $("inTitle").value = state.project || "";
+  $("inOwner").value = state.owner || "";
+  $("inDate").value = state.weekEnding || "";
+}
+function renderHead(){
+  $("sTitle").textContent = state.project || "Add a title below";
+  $("sTitle").classList.toggle("ph", !state.project);
+  $("sWeek").textContent = fmtDate(state.weekEnding);
+  $("sOwner").textContent = state.owner || "—";
+  $("wkLabel").innerHTML = "Report date <b></b>"; $("wkLabel").querySelector("b").textContent = fmtDate(state.weekEnding);
+  [...$("rag").children].forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === state.status)));
+  $("fSources").textContent = state.sources?.length ? "Sources: " + state.sources.join(" · ") : "";
+}
+function editable(cls, value, onInput, title){
+  const el = document.createElement("span"); el.className = cls; el.contentEditable = "true"; el.textContent = value || "";
+  if (title) el.title = title;
+  el.addEventListener("input", () => { onInput(el.textContent); dirty(); });
+  return el;
+}
+function pillSelect(options, value, clsFor, onChange, label){
+  const s = document.createElement("select"); s.className = "pill " + clsFor(value); s.setAttribute("aria-label", label);
+  for (const [v, t] of options){ const o = document.createElement("option"); o.value = v; o.textContent = t; s.append(o); }
+  s.value = value;
+  s.onchange = () => { onChange(s.value); s.className = "pill " + clsFor(s.value); dirty(); };
+  return s;
+}
+function render(){
+  renderHead();
+  const grid = $("grid"); grid.textContent = "";
+  for (const b of BLOCKS){
+    const q = document.createElement("div"); q.className = "q"; q.dataset.k = b.k;
+    q.innerHTML = `<div class="q-h"><h2><i></i>${b.title}</h2><button class="add" type="button" aria-label="Add item to ${b.title}">+ Add</button></div><ul class="items"></ul>`;
+    const ul = q.querySelector("ul");
+    if (b.k === "jira") q.querySelector(".q-h").insertBefore(jiraControl(), q.querySelector(".add"));
+    if (b.k === "risks") ul.classList.add("kinds");
+    if (b.k === "jira") ul.classList.add("jira");
+    const items = state.blocks[b.k] ||= [];
+    if (!items.length){ const e = document.createElement("li"); e.className="empty"; e.style.display="block"; e.textContent="Empty. Generate from your notes or click + Add."; ul.append(e); }
+    items.forEach((it, i) => {
+      const li = document.createElement("li");
+      const del = document.createElement("button"); del.className="del"; del.type="button"; del.textContent="×"; del.setAttribute("aria-label","Remove item");
+      del.onclick = () => { items.splice(i,1); dirty(); render(); };
+      if (b.k === "jira"){
+        li.append(
+          editable("key", it.key, v => it.key = v, "Ticket key"),
+          editable("it", it.text, v => it.text = v),
+          pillSelect(STATUSES.map(s => [s[0], s[0]]), normStatus(it.status), stClass, v => it.status = v, "Ticket status"),
+          del);
+      } else {
+        const tag = editable("tag" + sevClass(b.k, it), it.tag, v => it.tag = v, b.tagHint);
+        tag.addEventListener("blur", () => { tag.className = "tag" + sevClass(b.k, it); });
+        const parts = [];
+        if (b.k === "risks") parts.push(pillSelect(KINDS, normKind(it.kind), v => "k-" + v, v => { it.kind = v; tag.className = "tag" + sevClass(b.k, it); }, "Type"));
+        parts.push(editable("it", it.text, v => it.text = v), tag, del);
+        li.append(...parts);
+      }
+      ul.append(li);
+    });
+    q.querySelector(".add").onclick = () => {
+      items.push(b.k === "jira" ? {key:"KEY-1", text:"Ticket summary", status:"To Do"} : b.k === "risks" ? {kind:"risk", text:"New item", tag:""} : {text:"New item", tag:""});
+      dirty(); render();
+      const last = grid.querySelector(`.q[data-k="${b.k}"] li:last-child .it`);
+      if (last){ last.focus(); document.getSelection().selectAllChildren(last); }
+    };
+    grid.append(q);
+  }
+}
+function jiraControl(){
+  const j = state.jiraProgress ||= emptyJira();
+  const wrap = document.createElement("div"); wrap.className = "jp";
+  const sel = document.createElement("select"); sel.setAttribute("aria-label","Jira progress");
+  for (const [v,t] of [["","Not set"],["complete","Complete"],["na","N/A"],["open","Tickets left"]]){ const o = document.createElement("option"); o.value = v; o.textContent = t; sel.append(o); }
+  sel.value = j.status; sel.className = "jp-" + (j.status || "none");
+  const num = document.createElement("input"); num.type = "number"; num.min = "0"; num.id = "jiraLeft"; num.setAttribute("aria-label","Tickets left");
+  num.value = j.left ?? ""; num.hidden = j.status !== "open";
+  const lbl = document.createElement("span"); lbl.textContent = "left"; lbl.hidden = num.hidden;
+  sel.onchange = () => {
+    j.status = sel.value; sel.className = "jp-" + (j.status || "none");
+    if (j.status === "open" && j.left === null) j.left = (state.blocks.jira || []).filter(t => normStatus(t.status) !== "Done").length;
+    if (j.status !== "open") j.left = null;
+    num.value = j.left ?? ""; num.hidden = lbl.hidden = j.status !== "open";
+  };
+  num.oninput = () => { const n = parseInt(num.value, 10); j.left = Number.isFinite(n) && n >= 0 ? n : null; };
+  wrap.append(sel, num, lbl);
+  return wrap;
+}
+function sevClass(k, it){
+  if (k !== "risks" || !it.tag || normKind(it.kind) === "decision") return "";
+  const t = it.tag.toLowerCase();
+  return t.startsWith("h") ? " sev-high" : t.startsWith("m") ? " sev-med" : t.startsWith("l") ? " sev-low" : "";
+}
+function dirty(){}
+
+$("inTitle").addEventListener("input", e => { state.project = e.target.value.trim(); dirty(); renderHead(); });
+$("inOwner").addEventListener("input", e => { state.owner = e.target.value.trim(); dirty(); renderHead(); });
+$("inDay").value = String(reportDay);
+$("inDay").addEventListener("change", e => {
+  reportDay = Number(e.target.value);
+  try { localStorage.setItem("reportDay", String(reportDay)); } catch {}
+  state.weekEnding = nextReportDate(); $("inDate").value = state.weekEnding; dirty(); renderHead();
+});
+$("inDate").addEventListener("change", e => { if (e.target.value){ state.weekEnding = e.target.value; dirty(); renderHead(); } });
+[...$("rag").children].forEach(b => b.onclick = () => { state.status = b.dataset.v; dirty(); renderHead(); });
+
+$("newBtn").onclick = () => {
+  state = {project: state.project, owner: state.owner, weekEnding: nextReportDate(), status:"",
+    blocks: emptyBlocks(), jiraProgress: emptyJira(), sources:[], generatedBy:"manual"};
+  currentDocId = null; $("history").value = ""; syncFields(); render(); toast("Started a blank 4-blocker.");
+};
+
+/* ---------- files ---------- */
+async function readFile(f){
+  if (/\.docx$/i.test(f.name)){
+    if (!window.mammoth) throw new Error("Word reader did not load");
+    return (await window.mammoth.extractRawText({arrayBuffer: await f.arrayBuffer()})).value;
+  }
+  const txt = await f.text();
+  return /\.html?$/i.test(f.name) ? new DOMParser().parseFromString(txt,"text/html").body.textContent : txt;
+}
+async function addFiles(list){
+  for (const f of list){
+    try { const text = (await readFile(f)).trim(); if (text) attachments.push({name:f.name, text}); else toast(`${f.name} has no readable text.`); }
+    catch { toast(`Couldn't read ${f.name}. Try saving it as .txt or .docx.`); }
+  }
+  renderChips();
+}
+function renderChips(){
+  const c = $("fileChips"); c.textContent = "";
+  attachments.forEach((a,i) => {
+    const el = document.createElement("span"); el.className="chip";
+    const s = document.createElement("span"); s.textContent = `${a.name} · ${Math.round(a.text.length/100)/10}k chars`;
+    const x = document.createElement("button"); x.type="button"; x.textContent="×"; x.setAttribute("aria-label",`Remove ${a.name}`);
+    x.onclick = () => { attachments.splice(i,1); renderChips(); };
+    el.append(s,x); c.append(el);
+  });
+}
+$("fileIn").addEventListener("change", e => { addFiles([...e.target.files]); e.target.value = ""; });
+const drop = $("drop");
+["dragenter","dragover"].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.add("over"); }));
+["dragleave","drop"].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.remove("over"); }));
+drop.addEventListener("drop", e => addFiles([...e.dataTransfer.files]));
+$("prompt").addEventListener("drop", e => { if (e.dataTransfer.files.length){ e.preventDefault(); addFiles([...e.dataTransfer.files]); } });
+
+/* ---------- generate ---------- */
+let ctl = null;
+
+const str = v => String(v ?? "").trim();
+function cleanBlocks(src){
+  const b = src || {};
+  const out = emptyBlocks();
+  const arr = v => Array.isArray(v) ? v : [];
+  out.accomplishments = arr(b.accomplishments).map(x => typeof x === "string" ? {text:x, tag:""} : {text:str(x?.text), tag:str(x?.tag)}).filter(x => x.text).slice(0,6);
+  out.upcoming = arr(b.upcoming).map(x => typeof x === "string" ? {text:x, tag:""} : {text:str(x?.text), tag:str(x?.tag)}).filter(x => x.text).slice(0,6);
+  out.risks = arr(b.risks).map(x => typeof x === "string" ? {kind:"risk", text:x, tag:""} : {kind:normKind(x?.kind), text:str(x?.text), tag:str(x?.tag)})
+    .concat(arr(b.asks).map(x => ({kind:"decision", text:str(x?.text ?? x), tag:str(x?.tag)}))) // older saves kept asks separately
+    .filter(x => x.text).slice(0,7);
+  out.jira = arr(b.jira).map(x => ({key:str(x?.key), text:str(x?.text ?? x?.summary), status:normStatus(x?.status)})).filter(x => x.key || x.text).slice(0,8);
+  return out;
+}
+const ERR = {
+  rate_limited:"Too many requests right now. Wait a few minutes and try again.",
+  too_large:"That's too much text at once. Remove a file or trim the notes.",
+  refused:"Claude declined this input. Remove anything sensitive and try again.",
+  bad_output:"Claude's answer couldn't be read as a slide. Try again.",
+  not_configured:"Generate isn't set up on this site yet (missing API key).",
+};
+$("genBtn").onclick = async () => {
+  const st = $("genStatus");
+  if (!$("prompt").value.trim() && !attachments.length){ st.className="status err"; st.textContent = "Add notes or attach a file first."; $("prompt").focus(); return; }
+  const merge = $("modeMerge").checked;
+  ctl = new AbortController();
+  $("genBtn").disabled = true; $("stopBtn").hidden = false;
+  st.className="status"; st.textContent = "Reading your notes…";
+  try {
+    const slow = setTimeout(() => { st.textContent = "Writing the slide… this can take up to a minute."; }, 6000);
+    let res;
+    try {
+      res = await fetch("/api/generate", {
+        method: "POST", signal: ctl.signal, headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({
+          notes: $("prompt").value.trim(),
+          files: attachments.map(a => ({name: a.name, text: a.text})),
+          project: state.project, reportDate: state.weekEnding, today: new Date().toISOString().slice(0,10),
+          current: merge ? {status:state.status, blocks:state.blocks, jiraProgress:state.jiraProgress, sources:state.sources} : null,
+        }),
+      });
+    } finally { clearTimeout(slow); }
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw {code: data.error || (res.status === 404 ? "no_api" : "server")};
+    const r = data.slide;
+    state = {
+      project: state.project,
+      owner: state.owner,
+      weekEnding: state.weekEnding,
+      status: ["green","yellow","red"].includes(r?.status) ? r.status : "green",
+      blocks: cleanBlocks(r?.blocks),
+      jiraProgress: null,
+      sources: Array.isArray(r?.sources) ? r.sources.map(String).filter(Boolean).slice(0,8) : [],
+      generatedBy:"claude"
+    };
+    state.jiraProgress = cleanJira(r?.jiraProgress, state.blocks.jira);
+    if (!merge) currentDocId = null;
+    syncFields(); render();
+    st.textContent = state.project && state.owner ? "Done. Click any line to edit, then save." : "Done. Add the title and owner above, then save.";
+  } catch(e){
+    const stopped = e?.name === "AbortError";
+    st.className = stopped ? "status" : "status err";
+    st.textContent = stopped ? "Stopped." : e?.code === "no_api" ? "Generate only works on the deployed site (Vercel). You can still fill in the slide by hand."
+      : (ERR[e?.code] || "Something went wrong reaching Claude. Try again.");
+  } finally {
+    $("genBtn").disabled = false; $("stopBtn").hidden = true;
+  }
+};
+$("stopBtn").onclick = () => ctl?.abort();
+
+/* ---------- history (this browser) ---------- */
+const HKEY = "elb.history.v1";
+let historyDocs = [];
+function readHistory(){ try { const v = JSON.parse(localStorage.getItem(HKEY) || "[]"); return Array.isArray(v) ? v : []; } catch { return []; } }
+function writeHistory(list){ try { localStorage.setItem(HKEY, JSON.stringify(list)); return true; } catch { return false; } }
+function renderHistory(){
+  historyDocs = readHistory().sort((a,b) => String(b.weekEnding).localeCompare(String(a.weekEnding)));
+  const sel = $("history"); const cur = currentDocId || "";
+  sel.textContent = "";
+  const o = document.createElement("option"); o.value = ""; o.textContent = historyDocs.length ? `History (${historyDocs.length})` : "History (empty)"; sel.append(o);
+  for (const v of historyDocs){
+    const op = document.createElement("option"); op.value = v.id;
+    op.textContent = `${fmtDate(v.weekEnding)} · ${v.project || "Untitled"}`;
+    sel.append(op);
+  }
+  sel.value = historyDocs.some(d => d.id === cur) ? cur : "";
+}
+function loadDoc(v){
+  v = structuredClone(v);
+  state = {project:v.project||"", owner:v.owner||"", weekEnding:v.weekEnding||nextReportDate(), status:v.status||"",
+    blocks: cleanBlocks(v.blocks), jiraProgress: cleanJira(v.jiraProgress), sources:v.sources||[], generatedBy:v.generatedBy||"manual"};
+  currentDocId = v.id; $("history").value = v.id; syncFields(); render();
+}
+$("history").onchange = e => {
+  const d = historyDocs.find(x => x.id === e.target.value); if (!d) return;
+  loadDoc(d); toast(`Loaded ${fmtDate(state.weekEnding)}.`);
+};
+$("saveBtn").onclick = () => {
+  if (!state.project){ toast("Add a 4-blocker title before saving."); $("inTitle").focus(); return; }
+  const id = currentDocId || `${state.weekEnding}_${slug(state.project)}`;
+  const doc = {
+    id, project: state.project, owner: state.owner, weekEnding: state.weekEnding, status: state.status,
+    blocks: state.blocks, jiraProgress: {status: state.jiraProgress?.status || "", ticketsLeft: state.jiraProgress?.left ?? null},
+    sources: state.sources || [], generatedBy: state.generatedBy || "manual", updatedAt: new Date().toISOString()
+  };
+  const list = readHistory().filter(d => d.id !== id); list.push(doc);
+  if (!writeHistory(list)){ toast("Couldn't save. Your browser may be blocking site storage."); return; }
+  currentDocId = id; renderHistory(); toast("Saved to history in this browser.");
+};
+
+/* ---------- PDF ---------- */
+function buildPdf(){
+  const { jsPDF } = window.jspdf;
+  const W = 960, H = 540;
+  const pdf = new jsPDF({orientation:"landscape", unit:"pt", format:[W,H]});
+  const ink=[228,225,221], muted=[156,147,137], line=[45,41,37], bg=[25,23,21], accent=[217,214,210];
+  const C = {green:[143,209,158], amber:[240,208,112], red:[255,122,122], blue:[127,184,255], violet:[195,166,255], grey:[156,147,137], rose:[242,143,173]};
+  const RAG = {green:{c:C.green,t:"ON TRACK"}, yellow:{c:C.amber,t:"AT RISK"}, red:{c:C.red,t:"OFF TRACK"}};
+  const dot = {accomplishments:C.green, upcoming:C.blue, risks:C.rose, jira:C.violet};
+  const kindC = {risk:C.rose, issue:C.amber, decision:C.blue};
+  const stC = {"Done":C.green, "In Progress":C.blue, "In Review":C.violet, "Blocked":C.red, "To Do":C.grey};
+  const tint = (c, a) => c.map((v,k) => Math.round(v*a + bg[k]*(1-a)));
+  pdf.setFillColor(...bg); pdf.rect(0,0,W,H,"F");
+  // centered title
+  pdf.setTextColor(...ink); pdf.setFont("helvetica","bold"); pdf.setFontSize(26);
+  pdf.text(pdf.splitTextToSize(state.project || "Untitled", 600)[0], W/2, 44, {align:"center"});
+  pdf.setFont("helvetica","normal"); pdf.setFontSize(10.5); pdf.setTextColor(...muted);
+  pdf.text(`Report date ${fmtDate(state.weekEnding)}${state.owner ? "     Owner " + state.owner : ""}`, W/2, 64, {align:"center"});
+  const rag = RAG[state.status];
+  if (rag){
+  pdf.setFont("helvetica","bold"); pdf.setFontSize(9.5);
+  const pw = pdf.getTextWidth(rag.t) + 24, px = W-28-pw;
+  pdf.setFillColor(...tint(rag.c,.18)); pdf.roundedRect(px, 30, pw, 21, 10.5, 10.5, "F");
+  pdf.setTextColor(...rag.c); pdf.text(rag.t, px+pw/2, 43.5, {align:"center"});
+  }
+  // grid
+  const top = 82, foot = 26, gh = H-top-foot, cw = W/2, ch = gh/2;
+  pdf.setDrawColor(...line); pdf.setLineWidth(1);
+  pdf.line(0, top, W, top); pdf.line(cw, top, cw, top+gh); pdf.line(0, top+ch, W, top+ch); pdf.line(0, H-foot, W, H-foot);
+  pdf.setFillColor(...accent); pdf.roundedRect(W/2-20, top-1.5, 40, 3, 1.5, 1.5, "F");
+  BLOCKS.forEach((b, i) => {
+    const x = (i%2)*cw + 24, y = top + Math.floor(i/2)*ch + 28, maxW = cw - 48;
+    pdf.setFillColor(...tint(dot[b.k],.18)); pdf.roundedRect(x, y-13, 18, 18, 5, 5, "F");
+    pdf.setFillColor(...dot[b.k]); pdf.circle(x+9, y-4, 3.5, "F");
+    pdf.setTextColor(...ink); pdf.setFont("helvetica","bold"); pdf.setFontSize(12.5);
+    pdf.text(b.title, x+26, y);
+    const jl = b.k === "jira" ? jiraLabel(state.jiraProgress) : "";
+    if (jl && jl !== "Tickets left"){
+      const jc = {complete:C.green, na:C.grey, open:C.amber}[state.jiraProgress.status];
+      pdf.setFont("helvetica","bold"); pdf.setFontSize(9.5);
+      const jw = pdf.getTextWidth(jl.toUpperCase()) + 20;
+      pdf.setFillColor(...tint(jc,.18)); pdf.roundedRect(x+maxW-jw, y-13, jw, 18, 9, 9, "F");
+      pdf.setTextColor(...jc); pdf.text(jl.toUpperCase(), x+maxW-jw/2, y-0.5, {align:"center"});
+    }
+    let cy = y + 22; const limit = top + Math.floor(i/2)*ch + ch - 10;
+    const items = state.blocks[b.k] || [];
+    if (!items.length){ pdf.setFont("helvetica","italic"); pdf.setFontSize(10.5); pdf.setTextColor(...muted); pdf.text("Nothing to report", x, cy); }
+    for (const it of items){
+      // left label (kind / ticket key) and right label (tag / status)
+      let leftW = 14, leftTxt = "", leftC = ink, rightTxt = (it.tag||"").trim(), rightC = muted;
+      if (b.k === "risks"){ const k = normKind(it.kind); leftTxt = k.toUpperCase(); leftC = kindC[k]; leftW = 64;
+        if (k !== "decision"){ const t = rightTxt.toLowerCase(); rightC = t.startsWith("h") ? C.red : t.startsWith("m") ? C.amber : t.startsWith("l") ? C.green : muted; } }
+      if (b.k === "jira"){ leftTxt = it.key || ""; leftC = ink; leftW = 70; rightTxt = normStatus(it.status).toUpperCase(); rightC = stC[normStatus(it.status)]; }
+      pdf.setFont("courier","normal"); pdf.setFontSize(9); const tw = rightTxt ? pdf.getTextWidth(rightTxt) + 12 : 0;
+      pdf.setFont("helvetica","normal"); pdf.setFontSize(11.5);
+      const lines = pdf.splitTextToSize(it.text || "", maxW - leftW - tw);
+      if (cy + (lines.length-1)*14 > limit){ pdf.setTextColor(...muted); pdf.setFontSize(9.5); pdf.text("…more items not shown", x+leftW, cy); break; }
+      if (leftTxt){ pdf.setFont("courier", b.k === "jira" ? "bold" : "normal"); pdf.setFontSize(8.5); pdf.setTextColor(...leftC); pdf.text(leftTxt, x, cy); }
+      else { pdf.setFillColor(...dot[b.k]); pdf.circle(x+3, cy-4, 2, "F"); }
+      pdf.setFont("helvetica","normal"); pdf.setFontSize(11.5); pdf.setTextColor(...ink);
+      pdf.text(lines, x+leftW, cy, {lineHeightFactor:1.2});
+      if (rightTxt){ pdf.setFont("courier","normal"); pdf.setFontSize(9); pdf.setTextColor(...rightC); pdf.text(rightTxt, x + maxW, cy, {align:"right"}); }
+      cy += lines.length*14 + 7;
+    }
+  });
+  pdf.setFont("courier","normal"); pdf.setFontSize(8.5); pdf.setTextColor(...muted);
+  const src = state.sources?.length ? "Sources: " + state.sources.join(" · ") : "";
+  pdf.text(pdf.splitTextToSize(src, W-260)[0] || "", 24, H-9);
+  return pdf;
+}
+$("pdfBtn").onclick = async () => {
+  if (!window.jspdf){ toast("The PDF library didn't load. Reload the page and try again."); return; }
+  const name = `4-Blocker_${slug(state.project)}_${state.weekEnding}.pdf`;
+  try {
+    const url = URL.createObjectURL(buildPdf().output("blob"));
+    const a = document.createElement("a"); a.href = url; a.download = name; document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
+    toast(`Downloaded ${name}.`);
+  } catch {
+    toast("Couldn't create the PDF. Try again.");
+  }
+};
+
+/* ---------- boot ---------- */
+syncFields(); render(); renderHistory();
+
+// Generate needs the server function (api/generate.js), which only runs on Vercel.
+// On a static host like GitHub Pages that path is a 404, so switch Generate off up front.
+fetch("/api/generate", {method:"GET"}).then(res => {
+  if (res.status !== 404) return;
+  $("genBtn").disabled = true;
+  $("genBtn").title = "AI generation isn't switched on for this version of the site.";
+  $("genStatus").textContent = "AI generation is coming soon. You can still fill in the slide by hand and save it as a PDF.";
+}).catch(() => {});
+})();
+</script>
+
+</body>
+</html>
