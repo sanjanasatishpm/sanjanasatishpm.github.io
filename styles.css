@@ -284,7 +284,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 .about__body p { color: var(--ink-soft); font-size: 18px; }
 .about__facts { margin-top: 28px; border-top: 1px solid var(--line); }
 .about__facts li {
-  display: flex; justify-content: space-between; gap: 16px;
+  display: grid; grid-template-columns: 96px 1fr; gap: 16px; align-items: baseline;
   padding: 14px 0; border-bottom: 1px solid var(--line); font-weight: 500;
 }
 .about__facts li span { color: var(--ink-soft); font-weight: 400; }
