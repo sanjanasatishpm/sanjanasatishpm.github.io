@@ -614,7 +614,9 @@ ul { margin: 0; padding: 0; list-style: none; }
   .reveal { opacity: 1; transform: none; transition: none; }
   .card, .btn { transition: none; }
   .vine__stem, .bud, .leaf, .seed, .flower { transition: none; }
-  .note, .stack__sheet { transition: none; }
+  .stack__sheet { transition: none; }
+  /* Reduce Motion: notes fade in one by one, in place, without flying across */
+  .board .note { transform: rotate(var(--r)); transition: opacity .5s ease; transition-delay: calc(var(--i, 0) * 120ms); }
   .stack { animation: none !important; }
 }
 
