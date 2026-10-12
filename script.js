@@ -1,8 +1,24 @@
-// Always start at the very top when the page is loaded or refreshed
-if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-if (location.hash) history.replaceState(null, '', location.pathname + location.search);
-window.scrollTo(0, 0);
-window.addEventListener('pageshow', () => window.scrollTo(0, 0));
+// Start at the very top on load and refresh. The exception is arriving from a link to a
+// section (like the case study's "Back to portfolio" → #projects), which lands on that section.
+(function () {
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  const nav = performance.getEntriesByType ? performance.getEntriesByType('navigation')[0] : null;
+  const isReload = !!nav && nav.type === 'reload';
+  const hash = location.hash;
+  let target = null;
+  if (hash.length > 1 && !isReload) {
+    try { target = document.querySelector(hash); } catch (e) { target = null; }
+  }
+  // Clean the address so a later refresh starts at the top
+  if (hash) history.replaceState(null, '', location.pathname + location.search);
+  const go = () => {
+    if (!target) { window.scrollTo(0, 0); return; }
+    const offset = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+    window.scrollTo(0, target.getBoundingClientRect().top + window.scrollY - offset);
+  };
+  go();
+  window.addEventListener('load', go); // again once fonts and images have settled the layout
+})();
 
 // Theme toggle (remembers choice, falls back to system preference)
 (function () {

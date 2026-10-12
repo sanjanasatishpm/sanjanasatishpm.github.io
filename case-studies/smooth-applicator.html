@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Smooth Applicator — Case Study · Sanjana Satish</title>
+  <meta name="description" content="Product management case study: a one-handed, tremor-stabilizing, refillable lipstick, taken from discovery through strategy, requirements, validation, metrics, launch and pricing.">
+  <script>
+    // Apply the visitor's saved light/dark choice before the page paints
+    try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="case-study.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%234f6b4c'/><text x='50%25' y='56%25' text-anchor='middle' dominant-baseline='middle' font-family='Georgia' font-weight='700' font-size='30' fill='%23ffffff'>SS</text></svg>">
+</head>
+<body>
+  <header class="nav">
+    <a href="../index.html" class="nav__logo" aria-label="Back to portfolio home">SS<span>.</span></a>
+    <nav class="nav__links" aria-label="Case study">
+      <a href="../index.html#projects" class="nav__cta">← Back to portfolio</a>
+    </nav>
+  </header>
+
+  <main class="cs">
+    <header class="cs__header">
+      <p class="cs__eyebrow">Product Management Case Study</p>
+      <h1 class="cs__title">The Smooth Applicator</h1>
+      <p class="cs__meta">Oct 12, 2026 · @Sanjana</p>
+    </header>
+
+    <section class="cs__summary" aria-labelledby="summary">
+      <h2 id="summary">Summary</h2>
+      <p>The Smooth Applicator is a one-handed, tremor-stabilizing, refillable lipstick. I chose to license the stabilization IP to established beauty companies instead of launching a D2C brand, and to test engineering feasibility before spending on consumer research. The $30 price is anchored to competitor refills and luxury tiers.</p>
+    </section>
+
+    <section class="cs__section">
+      <h2><span class="cs__num">1</span> Discovery: the "why"</h2>
+      <p>Applying lipstick on the go or during commutes often leads to awkward angles, missed edges and smudging. Existing portable and one-handed options, such as short balms or magnetic caps, have no stabilization features. That leaves aging consumers and people with hand tremors underserved. Traditional cosmetics also create single-use plastic waste, which drives demand for refillable packaging.</p>
+      <p>The global beauty and personal care market is projected to reach USD 534 billion, with U.S. cosmetics at USD 17.17 billion. Revlon, L'Oréal and Maybelline dominate, so capital barriers to entry are high for new direct-to-consumer brands. Refillable lipsticks today range from $20 (Fenty Icon The Fill) to $199 (Valé Armor), and none integrate stabilization hardware.</p>
+      <div class="cs__table-wrap">
+        <table class="cs__table">
+          <thead><tr><th>Segment</th><th>Who</th><th>What they need</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">A: Working professionals</th><td>Ages 30–49</td><td>Efficiency, on-the-go convenience, sustainable routines</td></tr>
+            <tr><th scope="row">B: Aging consumers and users with disabilities</th><td>Ages 50+</td><td>Ergonomic support, easy one-handed opening, tremor-stabilizing application</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="cs__section">
+      <h2><span class="cs__num">2</span> Strategy: where and how to play</h2>
+      <p>The decision was to prioritize a B2B intellectual property and design licensing model over a standalone D2C brand. The aim is to engineer, patent and validate the stabilization mechanism, then pitch or license it to beauty conglomerates that already own global supply chains.</p>
+      <div class="cs__table-wrap">
+        <table class="cs__table cs__table--compare">
+          <thead><tr><th><span class="sr-only">Factor</span></th><th>Standalone D2C brand</th><th class="is-chosen">B2B IP and design licensing</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Capital</th><td>Heavy, to fight entrenched retail distribution</td><td class="is-chosen">Light, since the partner owns the supply chain</td></tr>
+            <tr><th scope="row">Market barrier</th><td>High marketing barriers against Revlon, L'Oréal, Maybelline</td><td class="is-chosen">Pitch incumbents instead of out-marketing them</td></tr>
+            <tr><th scope="row">Where risk sits</th><td>Hardware, inventory and brand at once</td><td class="is-chosen">Concentrated in proving the mechanism works</td></tr>
+            <tr><th scope="row">Decision</th><td>Not chosen</td><td class="is-chosen"><strong>Chosen</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="cs__section">
+      <h2><span class="cs__num">3</span> Product requirements: the "what"</h2>
+      <p class="cs__callout"><strong>Core benefit proposition:</strong> effortless, on-the-go application powered by a magnetic one-handed design and stabilization technology, with flexible, sustainable shade refills.</p>
+      <ul class="cs__list">
+        <li><strong>One-handed form factor:</strong> a magnetic closure cap with a top assist knob for unassisted opening.</li>
+        <li><strong>Multi-stage sliding mechanism:</strong> a side slide with three locks. The bottom lock secures the lipstick when not in use, the middle lock positions it for standard application, and the top lock unlocks the internal spindle so empty wax refills can be replaced quickly.</li>
+        <li><strong>Stabilization device:</strong> a permanent component in the slide mechanism using mechanical or electronic tremor reduction, adapted from medical assistive products such as Liftware Steady and the GYENNO Spoon.</li>
+        <li><strong>Sustainable materials:</strong> interchangeable organic wax inserts with lanolin oil, carnauba wax and beeswax, in a durable finished steel or lacquered metal shell.</li>
+      </ul>
+    </section>
+
+    <section class="cs__section">
+      <h2><span class="cs__num">4</span> Prototyping and technical feasibility: the "build"</h2>
+      <p>Today the project has only conceptual 3D renderings and preliminary physical mock-ups, so engineering feasibility is unproven. The main risk is whether miniature gyroscopic or electronic stabilization can fit inside a compact cosmetic tube without making it too heavy or cost-prohibitive.</p>
+      <h3>Validation plan</h3>
+      <ol class="cs__steps">
+        <li>Build high-fidelity CAD models with precise dimensions to test ergonomics.</li>
+        <li>Build functional mechanical prototypes of the sliding mechanism and magnetic cap.</li>
+        <li>Run structural stress tests of open/close durability and measure tremor-reduction efficiency.</li>
+      </ol>
+    </section>
+
+    <section class="cs__section">
+      <h2><span class="cs__num">5</span> Metrics and success criteria: the "measure"</h2>
+      <div class="cs__table-wrap">
+        <table class="cs__table">
+          <thead><tr><th>Type</th><th>Metric</th><th>Definition</th></tr></thead>
+          <tbody>
+            <tr><td><span class="cs__tag">Technical</span></td><th scope="row">Tremor reduction rate</th><td>Percentage decrease in application deviation and smudging versus a standard non-stabilized applicator</td></tr>
+            <tr><td><span class="cs__tag">Technical</span></td><th scope="row">Durability threshold</th><td>At least 1,000 flawless open/close and slider-lock cycles with no mechanical degradation</td></tr>
+            <tr><td><span class="cs__tag">Consumer</span></td><th scope="row">Perceived utility score</th><td>Focus-group rating of whether stabilization gives noticeable, practical value</td></tr>
+            <tr><td><span class="cs__tag">Consumer</span></td><th scope="row">Willingness to pay</th><td>Validation of the estimated $30 retail price against competitor brackets ($20 to $199)</td></tr>
+            <tr><td><span class="cs__tag">B2B</span></td><th scope="row">Pipeline engagement</th><td>Number of active exploratory licensing discussions with major beauty conglomerates</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="cs__section">
+      <h2><span class="cs__num">6</span> Launch plan and roadmap: the "go-live"</h2>
+      <ol class="cs__steps">
+        <li><strong>Feasibility and prototyping gate:</strong> finalize engineering blueprints and test whether the stabilization hardware can be manufactured cost-effectively.</li>
+        <li><strong>Qualitative and quantitative testing:</strong> run focus groups and interviews with industry professionals, everyday consumers and accessibility groups to measure real demand.</li>
+        <li><strong>Decision gate:</strong> choose between the two paths below.</li>
+        <li><strong>Product line expansion:</strong> if adoption succeeds, extend the form factor to adjacent products such as mascara wands or brow grooming tools.</li>
+      </ol>
+      <div class="cs__table-wrap">
+        <table class="cs__table">
+          <thead><tr><th>Decision gate path</th><th>Condition</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Path A</th><td>Technology unfeasible</td><td>Remove the stabilization hardware and pivot to a standard luxury refillable lipstick built around one-handed accessibility and form</td></tr>
+            <tr><th scope="row">Path B</th><td>Technology successful</td><td>Run controlled B2B regional tests in "beauty-obsessed" markets such as Fresno, CA, using local beauty school networks for baseline feedback, then pitch major cosmetic houses</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="cs__section">
+      <h2><span class="cs__num">7</span> Pricing: Economic Value Estimation</h2>
+      <p>The Smooth Applicator is priced at $30, a $10 premium over basic refills that covers the magnetic mechanism, finished steel or lacquered metal housing and the embedded stabilization device.</p>
+      <div class="cs__table-wrap">
+        <table class="cs__table">
+          <thead><tr><th>Product</th><th>Retail price</th><th>Role in the comparison</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Fenty Icon The Fill</th><td>$20</td><td>Baseline refillable</td></tr>
+            <tr class="is-chosen"><th scope="row">The Smooth Applicator</th><td><strong>$30</strong></td><td>Baseline plus $10 value add-on</td></tr>
+            <tr><th scope="row">Chanel Rouge Allure</th><td>$55</td><td>Luxury metal-encased, low end</td></tr>
+            <tr><th scope="row">Valé Armor</th><td>$199</td><td>Luxury, high end</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Material cost is the main sensitivity. Standard finished steel keeps manufacturing in mid-tier ranges, while gold or silver plating would push the price toward the luxury end, at $50 or more.</p>
+    </section>
+
+    <section class="cs__section cs__takeaways">
+      <h2><span class="cs__num">8</span> What this case shows</h2>
+      <ul class="cs__list">
+        <li><strong>Prioritizing by capital risk:</strong> I chose IP licensing over a D2C launch because incumbents control distribution and a new brand would carry hardware, inventory and marketing risk at once.</li>
+        <li><strong>Testing the riskiest assumption first:</strong> the roadmap gates on engineering feasibility before consumer demand testing, with a fallback (Path A) if the technology fails.</li>
+        <li><strong>Anchoring price in value:</strong> the $30 price is built from competitor benchmarks and a clear $10 premium, and willingness to pay is a defined validation metric.</li>
+      </ul>
+    </section>
+
+    <p class="cs__back"><a class="btn btn--ghost" href="../index.html#projects">← Back to projects</a></p>
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 Sanjana Satish</p>
+    <a href="#top" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">Back to top ↑</a>
+  </footer>
+</body>
+</html>
