@@ -381,7 +381,6 @@ ul { margin: 0; padding: 0; list-style: none; }
 .popup__list li { position: relative; padding-left: 18px; margin-top: 6px; }
 .popup__list li::before { content: ""; position: absolute; left: 2px; top: .65em; width: 7px; height: 7px; border-radius: 2px; background: var(--terra); }
 .popup__list b { color: var(--ink); font-weight: 600; }
-.project--soon { grid-column: 1 / -1; }
 .project--soon:hover { transform: none; box-shadow: none; }
 .project--soon .project__num { color: var(--terra); }
 .project--soon p { color: var(--ink-soft); }
