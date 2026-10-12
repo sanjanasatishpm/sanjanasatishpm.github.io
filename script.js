@@ -280,3 +280,22 @@ const CONTACT_EMAIL = 'sanjana.satish28@gmail.com';
     sub.textContent = open ? 'tap to tidy up' : '9 notes inside';
   });
 })();
+
+// Pop-ups: buttons with data-opens="<dialog id>" open that dialog; X, Esc, or clicking outside closes it
+(function () {
+  document.querySelectorAll('[data-opens]').forEach((btn) => {
+    const dialog = document.getElementById(btn.dataset.opens);
+    if (!dialog || typeof dialog.showModal !== 'function') return;
+    btn.addEventListener('click', () => dialog.showModal());
+  });
+  document.querySelectorAll('dialog.popup').forEach((dialog) => {
+    dialog.querySelector('.popup__close').addEventListener('click', () => dialog.close());
+    // Close when clicking the dimmed area outside the box (not the box's own padding)
+    dialog.addEventListener('click', (e) => {
+      if (e.target !== dialog) return;
+      const r = dialog.getBoundingClientRect();
+      const inside = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+      if (!inside) dialog.close();
+    });
+  });
+})();

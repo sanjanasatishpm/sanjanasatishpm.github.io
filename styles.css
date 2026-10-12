@@ -347,6 +347,29 @@ ul { margin: 0; padding: 0; list-style: none; }
   color: var(--terra); text-decoration: none; border-bottom: 2px solid currentColor; padding-bottom: 2px;
 }
 .project__link:hover { opacity: .75; }
+.project__links { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 24px; margin-top: 18px; }
+.project__links .project__link { margin-top: 0; }
+.project__link--btn { background: none; border-top: 0; border-left: 0; border-right: 0; font-family: inherit; cursor: pointer; padding: 0 0 2px; }
+
+/* Pop-up (native <dialog>) */
+.popup {
+  width: min(460px, calc(100% - 32px)); max-height: calc(100% - 48px); overflow: auto;
+  padding: 36px 28px 24px; border: 0; border-radius: var(--radius);
+  background: var(--bg); color: var(--ink); box-shadow: 0 24px 60px -12px rgba(0, 0, 0, .45);
+}
+.popup::backdrop { background: rgba(0, 0, 0, .45); backdrop-filter: blur(2px); }
+.popup[open] { animation: popup-in .22s ease-out; }
+@keyframes popup-in { from { opacity: 0; transform: translateY(12px) scale(.97); } to { opacity: 1; transform: none; } }
+.popup__close {
+  position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; border-radius: 50%;
+  display: grid; place-items: center; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer;
+}
+.popup__close:hover { background: var(--ink); color: var(--bg); }
+.popup__close svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; }
+.popup__eyebrow { margin: 0 0 6px; font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--terra); }
+.popup__title { font-size: 26px; margin: 0 40px 14px 0; }
+.popup p:not(.popup__eyebrow) { color: var(--ink-soft); font-size: 16px; }
+.popup p:last-child { margin-bottom: 0; }
 .project--soon { grid-column: 1 / -1; }
 .project--soon:hover { transform: none; box-shadow: none; }
 .project--soon .project__num { color: var(--terra); }
@@ -618,6 +641,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   /* Reduce Motion: notes fade in one by one, in place, without flying across */
   .board .note { transform: rotate(var(--r)); transition: opacity .5s ease; transition-delay: calc(var(--i, 0) * 120ms); }
   .stack { animation: none !important; }
+  .popup[open] { animation: none; }
 }
 
 /* ============ Responsive ============ */
