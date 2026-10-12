@@ -353,7 +353,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 /* Pop-up (native <dialog>) */
 .popup {
-  width: min(460px, calc(100% - 32px)); max-height: calc(100% - 48px); overflow: auto;
+  width: min(580px, calc(100% - 32px)); max-height: calc(100% - 48px); overflow: auto;
   padding: 36px 28px 24px; border: 0; border-radius: var(--radius);
   background: var(--bg); color: var(--ink); box-shadow: 0 24px 60px -12px rgba(0, 0, 0, .45);
 }
@@ -361,7 +361,9 @@ ul { margin: 0; padding: 0; list-style: none; }
 .popup[open] { animation: popup-in .22s ease-out; }
 @keyframes popup-in { from { opacity: 0; transform: translateY(12px) scale(.97); } to { opacity: 1; transform: none; } }
 .popup__close {
-  position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; border-radius: 50%;
+  /* stays pinned at the top-right even when the pop-up content scrolls */
+  position: sticky; top: 0; float: right; margin: -24px -16px 0 8px; z-index: 1;
+  width: 36px; height: 36px; border-radius: 50%;
   display: grid; place-items: center; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer;
 }
 .popup__close:hover { background: var(--ink); color: var(--bg); }
@@ -369,7 +371,16 @@ ul { margin: 0; padding: 0; list-style: none; }
 .popup__eyebrow { margin: 0 0 6px; font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--terra); }
 .popup__title { font-size: 26px; margin: 0 40px 14px 0; }
 .popup p:not(.popup__eyebrow) { color: var(--ink-soft); font-size: 16px; }
-.popup p:last-child { margin-bottom: 0; }
+.popup__heading {
+  margin: 20px 0 6px; font-family: var(--font-body); font-size: 13px; font-weight: 600;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--ink);
+}
+.popup__title + .popup__heading { margin-top: 4px; }
+.popup p:not(.popup__eyebrow) { margin-bottom: 0; line-height: 1.6; }
+.popup__list { margin: 0; padding: 0; list-style: none; color: var(--ink-soft); font-size: 16px; line-height: 1.6; }
+.popup__list li { position: relative; padding-left: 18px; margin-top: 6px; }
+.popup__list li::before { content: ""; position: absolute; left: 2px; top: .65em; width: 7px; height: 7px; border-radius: 2px; background: var(--terra); }
+.popup__list b { color: var(--ink); font-weight: 600; }
 .project--soon { grid-column: 1 / -1; }
 .project--soon:hover { transform: none; box-shadow: none; }
 .project--soon .project__num { color: var(--terra); }
