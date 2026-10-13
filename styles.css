@@ -218,11 +218,16 @@ ul { margin: 0; padding: 0; list-style: none; }
 .hero__title {
   font-family: var(--font-display);
   font-size: clamp(30px, 3.8vw, 44px); font-weight: 700;
-  letter-spacing: -.015em; line-height: 1.08;
-  color: var(--ink); margin-bottom: 28px;
+  letter-spacing: .06em; line-height: 1.08; text-transform: uppercase;
+  color: var(--ink); margin-bottom: 14px;
 }
-.hero__lede { font-size: clamp(17px, 2vw, 20px); color: var(--ink-soft); max-width: 640px; margin-bottom: 36px; }
-.hero__actions { display: flex; gap: 14px; flex-wrap: wrap; }
+/* The S in Sanjana and Satish, set in a cursive script */
+.hero__initial {
+  font-family: "Great Vibes", cursive; font-weight: 400; text-transform: none;
+  font-size: 1.4em; letter-spacing: 0; line-height: 0; margin-right: .03em;
+}
+.hero__tagline { margin: 0; font-size: clamp(16px, 1.8vw, 20px); letter-spacing: .04em; color: var(--ink-soft); }
+.hero__sep { margin: 0 .45em; color: var(--terra); }
 
 
 /* ============ Buttons ============ */
