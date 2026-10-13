@@ -221,9 +221,9 @@ ul { margin: 0; padding: 0; list-style: none; }
   letter-spacing: .06em; line-height: 1.08; text-transform: uppercase;
   color: var(--ink); margin-bottom: 14px;
 }
-/* The S in Sanjana and Satish, set in a cursive script */
+/* The S in Sanjana and Satish, set in a cursive script (Snell Roundhand on Apple devices, Great Vibes elsewhere) */
 .hero__initial {
-  font-family: "Great Vibes", cursive; font-weight: 400; text-transform: none;
+  font-family: "Snell Roundhand", "Great Vibes", cursive; font-weight: 400; text-transform: none;
   font-size: 1.4em; letter-spacing: 0; line-height: 0; margin-right: .03em;
 }
 .hero__tagline { margin: 0; font-size: clamp(16px, 1.8vw, 20px); letter-spacing: .04em; color: var(--ink-soft); }
