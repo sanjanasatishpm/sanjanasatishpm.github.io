@@ -1,11 +1,11 @@
 /* ============ Tokens ============ */
-/* Light: white page with terracotta (#b25f50) bands and terracotta text, light sage boxes.
+/* Light: white page with black bands, black text, light sage boxes.
    Dark: midnight blue page with deeper navy bands and soft blue accents. */
 :root {
   --bg: #ffffff;
   --bg-alt: #f5f5f5;
   --surface: #e8efe4;  /* light sage — all boxes */
-  --band-alt: #b25f50; /* alternating terracotta section bands */
+  --band-alt: #111111; /* alternating black section bands */
   /* hero marble: soft white, gray and pale sage */
   --marble-base: #f7f8f6;
   --marble-a: #eef1ec;
@@ -13,8 +13,8 @@
   --marble-c: #dde4d9;
   --marble-hi: #ffffff;
   --marble-vein: #cbd4c6;
-  --ink: #b25f50;       /* text in the white sections */
-  --ink-soft: #b25f50;  /* secondary text in the white sections */
+  --ink: #111111;
+  --ink-soft: #3a3a3a;
   --line: #d3ddce;
 
   /* Accents (names kept for structure; all are sage greens in light mode) */
@@ -101,30 +101,30 @@
   color-scheme: dark;
 }
 
-/* Light mode: the terracotta bands get light text, and boxes a deeper shade of the band color */
+/* Light mode: the black bands flip to light text and dark boxes */
 :root[data-theme="light"] :is(#about, #skills, #experience) {
-  --ink: #fffaf8;
-  --ink-soft: #f6e3de;
-  --line: rgba(255, 255, 255, .22);
-  --surface: #9c5244;
-  --bg: #8a4639;
-  --terra: #ffe3d9;
-  --teal: #f6d6cc;
-  --plum: #efcabe;
-  --mustard: #ffeae3;
-  --sage: #f3d3c8;
-  --on-accent: #8a4639;
+  --ink: #f5f5f2;
+  --ink-soft: #c9c9c4;
+  --line: #2e2e2e;
+  --surface: #1e1e1e;
+  --bg: #111111;
+  --terra: #a9c3a3;
+  --teal: #9fbb99;
+  --plum: #93b08d;
+  --mustard: #c5d8bf;
+  --sage: #8fae89;
+  --on-accent: #111111;
   color: var(--ink);
 }
 @media (prefers-color-scheme: light) {
   :root:not([data-theme]) :is(#about, #skills, #experience) {
-    --ink: #fffaf8;
-    --ink-soft: #f6e3de;
-    --line: rgba(255, 255, 255, .22);
-    --surface: #9c5244;
-    --bg: #8a4639;
-    --terra: #ffe3d9;
-    --on-accent: #8a4639;
+    --ink: #f5f5f2;
+    --ink-soft: #c9c9c4;
+    --line: #2e2e2e;
+    --surface: #1e1e1e;
+    --bg: #111111;
+    --terra: #a9c3a3;
+    --on-accent: #111111;
     color: var(--ink);
   }
 }
@@ -595,19 +595,19 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 /* Note form */
 .note-form {
-  background: #ffffff; color: #b25f50;
+  background: #ffffff; color: #111111;
   padding: 32px; border-radius: 24px;
   box-shadow: 0 20px 40px -20px rgba(0, 0, 0, .45);
   display: flex; flex-direction: column; gap: 16px;
 }
 .note-form h3 { font-size: 26px; font-weight: 700; }
 .note-form .req { color: #b4546a; font-weight: 600; }
-.note-form__hint { margin: -10px 0 0; font-size: 13px; color: #b25f50; }
+.note-form__hint { margin: -10px 0 0; font-size: 13px; color: #3a3a3a; }
 .note-form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .note-form label { display: flex; flex-direction: column; gap: 6px; }
-.note-form label span { font-size: 13px; font-weight: 600; color: #b25f50; }
+.note-form label span { font-size: 13px; font-weight: 600; color: #3a3a3a; }
 .note-form input, .note-form textarea {
-  font: inherit; font-size: 15px; color: #b25f50;
+  font: inherit; font-size: 15px; color: #111111;
   background: #f6f8f5; border: 1.5px solid #d3ddce; border-radius: 12px;
   padding: 12px 14px; width: 100%; resize: vertical;
   transition: border-color .2s, box-shadow .2s;
@@ -619,11 +619,11 @@ ul { margin: 0; padding: 0; list-style: none; }
 .note-form__hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 .note-form__submit {
   align-self: flex-start; border: 0; cursor: pointer;
-  background: #b25f50; color: #ffffff; font-family: inherit;
+  background: #111111; color: #ffffff; font-family: inherit;
 }
 .note-form__submit:hover { background: #4f6b4c; }
 .note-form__submit:disabled { opacity: .6; cursor: wait; transform: none; }
-.contact__inner .note-form__status { margin: 0; font-size: 14px; font-weight: 500; min-height: 1.4em; color: #b25f50; }
+.contact__inner .note-form__status { margin: 0; font-size: 14px; font-weight: 500; min-height: 1.4em; color: #3a3a3a; }
 .note-form__status.is-success { color: #4f6b4c; }
 .note-form__status.is-error { color: #b4546a; }
 :root[data-theme="dark"] .contact__inner { background: var(--surface); }
