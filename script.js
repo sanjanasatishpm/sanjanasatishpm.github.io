@@ -54,12 +54,12 @@
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const targets = document.querySelectorAll(
     '.hero__inner > .eyebrow, .stat, .section__label, .section__title, .about__body, .card, .project, ' +
-    '.vine__card, .desk, .board, .contact__intro, .note-form'
+    '.vine__card, .trait, .desk, .board, .contact__intro, .note-form'
   );
   if (reduce || !('IntersectionObserver' in window)) return;
 
   // Stagger items that sit side by side in the same grid row
-  const staggerGroups = ['.hero__inner', '.stats', '.cards', '.projects__grid', '.contact__inner'];
+  const staggerGroups = ['.hero__inner', '.stats', '.cards', '.projects__grid', '.traits', '.contact__inner'];
   targets.forEach((el) => {
     el.classList.add('reveal');
     const group = el.parentElement;

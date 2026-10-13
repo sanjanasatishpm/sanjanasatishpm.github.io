@@ -309,6 +309,17 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 .about__facts li span { color: var(--ink-soft); font-weight: 400; }
 
+/* "Things about me you don't see on my resume" */
+.about__extra { margin-top: 72px; padding-top: 40px; border-top: 1px solid var(--line); }
+.about__extra-title { font-size: clamp(22px, 2.6vw, 28px); margin-bottom: 24px; }
+.traits { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.trait {
+  padding: 26px 24px; border-radius: var(--radius);
+  background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--terra);
+}
+.trait__title { font-family: var(--font-display); font-size: 20px; line-height: 1.25; margin: 0 0 10px; color: var(--ink); }
+.trait p { margin: 0; font-size: 16px; line-height: 1.65; color: var(--ink-soft); }
+
 /* Work cards */
 .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
 .card {
@@ -684,7 +695,8 @@ ul { margin: 0; padding: 0; list-style: none; }
 @media (max-width: 760px) {
   .nav__links a:not(.nav__cta) { display: none; }
   .hero { padding-top: 64px; padding-bottom: 90px; }
-  .cards, .projects__grid, .table { grid-template-columns: 1fr; }
+  .cards, .projects__grid, .table, .traits { grid-template-columns: 1fr; }
+  .about__extra { margin-top: 48px; padding-top: 32px; }
   .desk { min-height: 300px; }
   .board { min-height: 0; padding: 16px; }
   .board__hint { font-size: 22px; }
