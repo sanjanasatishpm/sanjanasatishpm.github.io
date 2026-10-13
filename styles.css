@@ -215,9 +215,9 @@ ul { margin: 0; padding: 0; list-style: none; }
   display: inline-block; font-weight: 600; font-size: 13px; letter-spacing: .12em; text-transform: uppercase;
   color: var(--teal); margin-bottom: 24px;
 }
-/* Name: Candara on Windows, Ysabeau Office (a free look-alike) everywhere else */
+/* Name: large Palatino, two lines */
 .hero__title {
-  font-family: Candara, "Ysabeau Office", "Segoe UI", sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(52px, 9vw, 112px); font-weight: 700;
   letter-spacing: .05em; line-height: .98; text-transform: uppercase;
   color: var(--ink); margin-bottom: 22px;
@@ -234,7 +234,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 /* Tagline: each part rolls in from the left, one after another */
 .hero__tagline {
-  margin: 0; font-family: Candara, "Ysabeau Office", "Segoe UI", sans-serif;
+  margin: 0; font-family: var(--font-body);
   font-size: clamp(17px, 2vw, 22px); font-weight: 600; letter-spacing: .05em; color: var(--ink-soft);
 }
 .hero__part { display: inline-block; animation: part-roll .7s cubic-bezier(.2, .7, .2, 1) both; }
