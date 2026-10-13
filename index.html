@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261013b">
+  <link rel="stylesheet" href="styles.css?v=20261013c">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%234f6b4c'/><text x='50%25' y='56%25' text-anchor='middle' dominant-baseline='middle' font-family='Georgia' font-weight='700' font-size='30' fill='%23fbf8f1'>SS</text></svg>">
 </head>
 <body>
@@ -16,10 +16,10 @@
     <a href="#top" class="nav__logo" aria-label="Home">SS<span>.</span></a>
     <nav class="nav__links" aria-label="Primary">
       <a href="#about">About</a>
-      <a href="#work">Work</a>
       <a href="#projects">Projects</a>
-      <a href="#experience">Experience</a>
       <a href="#skills">Skills</a>
+      <a href="#work">Work</a>
+      <a href="#experience">Experience</a>
       <a href="#contact" class="nav__cta">Let's talk</a>
     </nav>
     <button class="theme-toggle" type="button" aria-label="Toggle dark mode">
@@ -131,9 +131,106 @@
       </div>
     </section>
 
+    <!-- PROJECTS -->
+    <section id="projects" class="section projects">
+      <div class="section__label"><span>02</span> Projects</div>
+      <h2 class="section__title">Things I've built on my own</h2>
+
+      <div class="projects__grid">
+        <article class="project">
+          <div class="project__num">1</div>
+          <div class="project__body">
+            <h3>This Portfolio</h3>
+            <p>A hand-built personal site designed from the ground up — responsive layout, light and dark themes,
+              and scroll animations, built with HTML, CSS, and JavaScript using Claude Code.</p>
+            <ul class="project__stack">
+              <li>HTML</li><li>CSS</li><li>JavaScript</li><li>Claude Code</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- To add a project, copy the <article class="project"> block above and update its content. -->
+
+        <article class="project">
+          <div class="project__num">2</div>
+          <div class="project__body">
+            <h3>Executive Leadership Brief</h3>
+            <p>Leadership 4-blockers usually live in one PowerPoint slide that's slow to update. This web app takes
+              meeting notes, emails and Jira exports and uses AI Automation to fill in accomplishments, next steps, risks and
+              decisions, and Jira ticket status. Edit any line, then save it as a PDF.</p>
+            <ul class="project__stack">
+              <li>JavaScript</li><li>Claude API</li><li>Vercel</li><li>Claude Code</li>
+            </ul>
+            <div class="project__links">
+              <button class="project__link project__link--btn" type="button" data-opens="brief-info" aria-haspopup="dialog">More info</button>
+              <a class="project__link" href="4-blocker/">Try the app →</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project">
+          <div class="project__num">3</div>
+          <div class="project__body">
+            <h3>Smooth Applicator: MBA Product Marketing Management Case Study</h3>
+            <p>A one-handed, tremor-stabilizing, refillable lipstick, taken from discovery and go-to-market strategy through product requirements, validation, launch planning and value-based pricing.</p>
+            <ul class="project__stack">
+              <li>Go-To-Market Strategy</li><li>Customer Research</li><li>Marketing Mix</li>
+            </ul>
+            <div class="project__links">
+              <a class="project__link" href="case-studies/smooth-applicator.html">Read Here →</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project project--soon">
+          <div class="project__num">4</div>
+          <div class="project__body">
+            <h3>More on the way</h3>
+            <p>New side projects and case studies are in progress. Check back soon.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="section skills">
+      <div class="section__label"><span>03</span> What I bring</div>
+      <h2 class="section__title">What I bring to the table</h2>
+
+      <div class="table">
+        <div class="desk" role="img" aria-label="A wooden desk with a laptop, camera, glasses and a tablet">
+          <button class="stack" type="button" aria-expanded="false" aria-controls="board">
+            <span class="stack__sheet stack__sheet--3" aria-hidden="true"></span>
+            <span class="stack__sheet stack__sheet--2" aria-hidden="true"></span>
+            <span class="stack__sheet stack__sheet--1">
+              <span class="stack__label">Click me!</span>
+              <span class="stack__sub">9 notes inside</span>
+            </span>
+          </button>
+          <a class="desk__credit" href="https://unsplash.com/" target="_blank" rel="noopener">Photo: Unsplash</a>
+        </div>
+
+        <div class="board" id="board" aria-live="polite">
+          <p class="board__hint">Click the sticky notes on the desk to see what I bring.</p>
+          <ul class="notes">
+            <li class="note note--yellow">Strategic Planning</li>
+            <li class="note note--sage">Prioritization Frameworks</li>
+            <li class="note note--blue">Roadmap Development</li>
+            <li class="note note--pink">Cross-Functional Team Leadership</li>
+            <li class="note note--yellow note--list"><span>Power BI</span><span>SQL</span><span>Data Modeling</span></li>
+            <li class="note note--sage">Stakeholder Management</li>
+            <li class="note note--blue note--list"><span>System Integration</span><span>APIs</span><span>Test Cases</span></li>
+            <li class="note note--yellow">Generative AI</li>
+            <li class="note note--pink note--certs note--list"><span class="note__title">Certifications</span><span>CSPO</span><span>Power BI Data Analyst</span><span>AWS Cloud Practitioner</span></li>
+          </ul>
+        </div>
+      </div>
+
+    </section>
+
     <!-- FEATURED WORK -->
     <section id="work" class="section work">
-      <div class="section__label"><span>02</span> Featured work</div>
+      <div class="section__label"><span>04</span> Featured work</div>
       <h2 class="section__title">Corporate products I've helped bring to life</h2>
 
       <div class="cards">
@@ -193,70 +290,9 @@
       </div>
     </section>
 
-    <!-- PROJECTS -->
-    <section id="projects" class="section projects">
-      <div class="section__label"><span>03</span> Projects</div>
-      <h2 class="section__title">Things I've built on my own</h2>
-
-      <div class="projects__grid">
-        <article class="project">
-          <div class="project__num">1</div>
-          <div class="project__body">
-            <h3>This Portfolio</h3>
-            <p>A hand-built personal site designed from the ground up — responsive layout, light and dark themes,
-              and scroll animations, built with HTML, CSS, and JavaScript using Claude Code.</p>
-            <ul class="project__stack">
-              <li>HTML</li><li>CSS</li><li>JavaScript</li><li>Claude Code</li>
-            </ul>
-          </div>
-        </article>
-
-        <!-- To add a project, copy the <article class="project"> block above and update its content. -->
-
-        <article class="project">
-          <div class="project__num">2</div>
-          <div class="project__body">
-            <h3>Executive Leadership Brief</h3>
-            <p>Leadership 4-blockers usually live in one PowerPoint slide that's slow to update. This web app takes
-              meeting notes, emails and Jira exports and uses Claude to fill in accomplishments, next steps, risks and
-              decisions, and Jira ticket status. Edit any line, then save it as a PDF.</p>
-            <ul class="project__stack">
-              <li>JavaScript</li><li>Claude API</li><li>Vercel</li><li>Claude Code</li>
-            </ul>
-            <div class="project__links">
-              <button class="project__link project__link--btn" type="button" data-opens="brief-info" aria-haspopup="dialog">More info</button>
-              <a class="project__link" href="4-blocker/">Try the app →</a>
-            </div>
-          </div>
-        </article>
-
-        <article class="project">
-          <div class="project__num">3</div>
-          <div class="project__body">
-            <h3>Smooth Applicator: MBA Product Marketing Management Case Study</h3>
-            <p>A one-handed, tremor-stabilizing, refillable lipstick, taken from discovery and go-to-market strategy through product requirements, validation, launch planning and value-based pricing.</p>
-            <ul class="project__stack">
-              <li>Go-To-Market Strategy</li><li>Customer Research</li><li>Marketing Mix</li>
-            </ul>
-            <div class="project__links">
-              <a class="project__link" href="case-studies/smooth-applicator.html">Read Here →</a>
-            </div>
-          </div>
-        </article>
-
-        <article class="project project--soon">
-          <div class="project__num">4</div>
-          <div class="project__body">
-            <h3>More on the way</h3>
-            <p>New side projects and case studies are in progress. Check back soon.</p>
-          </div>
-        </article>
-      </div>
-    </section>
-
     <!-- EXPERIENCE -->
     <section id="experience" class="section experience">
-      <div class="section__label"><span>04</span> Experience</div>
+      <div class="section__label"><span>05</span> Experience</div>
       <h2 class="section__title">How I've grown</h2>
       <p class="experience__intro">From a seed planted in code to a career in product, one season at a time.</p>
 
@@ -348,42 +384,6 @@
       </div>
     </section>
 
-    <!-- SKILLS -->
-    <section id="skills" class="section skills">
-      <div class="section__label"><span>05</span> What I bring</div>
-      <h2 class="section__title">What I bring to the table</h2>
-
-      <div class="table">
-        <div class="desk" role="img" aria-label="A wooden desk with a laptop, camera, glasses and a tablet">
-          <button class="stack" type="button" aria-expanded="false" aria-controls="board">
-            <span class="stack__sheet stack__sheet--3" aria-hidden="true"></span>
-            <span class="stack__sheet stack__sheet--2" aria-hidden="true"></span>
-            <span class="stack__sheet stack__sheet--1">
-              <span class="stack__label">Click me!</span>
-              <span class="stack__sub">9 notes inside</span>
-            </span>
-          </button>
-          <a class="desk__credit" href="https://unsplash.com/" target="_blank" rel="noopener">Photo: Unsplash</a>
-        </div>
-
-        <div class="board" id="board" aria-live="polite">
-          <p class="board__hint">Click the sticky notes on the desk to see what I bring.</p>
-          <ul class="notes">
-            <li class="note note--yellow">Strategic Planning</li>
-            <li class="note note--sage">Prioritization Frameworks</li>
-            <li class="note note--blue">Roadmap Development</li>
-            <li class="note note--pink">Cross-Functional Team Leadership</li>
-            <li class="note note--yellow note--list"><span>Power BI</span><span>SQL</span><span>Data Modeling</span></li>
-            <li class="note note--sage">Stakeholder Management</li>
-            <li class="note note--blue note--list"><span>System Integration</span><span>APIs</span><span>Test Cases</span></li>
-            <li class="note note--yellow">Generative AI</li>
-            <li class="note note--pink note--certs note--list"><span class="note__title">Certifications</span><span>CSPO</span><span>Power BI Data Analyst</span><span>AWS Cloud Practitioner</span></li>
-          </ul>
-        </div>
-      </div>
-
-    </section>
-
     <!-- CONTACT -->
     <section id="contact" class="contact">
       <div class="contact__inner">
@@ -458,6 +458,6 @@
     <a href="#top">Back to top ↑</a>
   </footer>
 
-  <script src="script.js?v=20261013b"></script>
+  <script src="script.js?v=20261013c"></script>
 </body>
 </html>
