@@ -53,7 +53,7 @@
 (function () {
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const targets = document.querySelectorAll(
-    '.hero__inner > *, .stat, .section__label, .section__title, .about__body, .card, .project, ' +
+    '.hero__inner > .eyebrow, .stat, .section__label, .section__title, .about__body, .card, .project, ' +
     '.vine__card, .desk, .board, .contact__intro, .note-form'
   );
   if (reduce || !('IntersectionObserver' in window)) return;

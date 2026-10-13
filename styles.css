@@ -215,19 +215,34 @@ ul { margin: 0; padding: 0; list-style: none; }
   display: inline-block; font-weight: 600; font-size: 13px; letter-spacing: .12em; text-transform: uppercase;
   color: var(--teal); margin-bottom: 24px;
 }
+/* Name: Candara on Windows, Ysabeau Office (a free look-alike) everywhere else */
 .hero__title {
-  font-family: var(--font-display);
-  font-size: clamp(30px, 3.8vw, 44px); font-weight: 700;
-  letter-spacing: .06em; line-height: 1.08; text-transform: uppercase;
-  color: var(--ink); margin-bottom: 14px;
+  font-family: Candara, "Ysabeau Office", "Segoe UI", sans-serif;
+  font-size: clamp(52px, 9vw, 112px); font-weight: 700;
+  letter-spacing: .05em; line-height: .98; text-transform: uppercase;
+  color: var(--ink); margin-bottom: 22px;
 }
-/* The S in Sanjana and Satish, set in a cursive script (Snell Roundhand on Apple devices, Great Vibes elsewhere) */
-.hero__initial {
-  font-family: "Snell Roundhand", "Great Vibes", cursive; font-weight: 400; text-transform: none;
-  font-size: 1.4em; letter-spacing: 0; line-height: 0; margin-right: .03em;
+.hero__first, .hero__last { display: block; }
+/* Satish sits on its own line, nudged a little to the right */
+.hero__last { position: relative; left: .9em; }
+
+/* Entrance: Sanjana drifts down and Satish drifts up into place, then they stay put */
+.hero__first { animation: name-down 1.1s cubic-bezier(.2, .7, .2, 1) .1s both; }
+.hero__last { animation: name-up 1.1s cubic-bezier(.2, .7, .2, 1) .1s both; }
+@keyframes name-down { from { opacity: 0; transform: translateY(-.32em); } to { opacity: 1; transform: none; } }
+@keyframes name-up { from { opacity: 0; transform: translateY(.32em); } to { opacity: 1; transform: none; } }
+
+/* Tagline: each part rolls in from the left, one after another */
+.hero__tagline {
+  margin: 0; font-family: Candara, "Ysabeau Office", "Segoe UI", sans-serif;
+  font-size: clamp(17px, 2vw, 22px); font-weight: 600; letter-spacing: .05em; color: var(--ink-soft);
 }
-.hero__tagline { margin: 0; font-size: clamp(16px, 1.8vw, 20px); letter-spacing: .04em; color: var(--ink-soft); }
-.hero__sep { margin: 0 .45em; color: var(--terra); }
+.hero__part { display: inline-block; animation: part-roll .7s cubic-bezier(.2, .7, .2, 1) both; }
+.hero__part:nth-child(1) { animation-delay: .9s; }
+.hero__part:nth-child(2) { animation-delay: 1.05s; }
+.hero__part:nth-child(3) { animation-delay: 1.2s; }
+@keyframes part-roll { from { opacity: 0; transform: translateX(-28px); } to { opacity: 1; transform: none; } }
+.hero__sep { margin: 0 .5em; color: var(--terra); }
 
 
 /* ============ Buttons ============ */
@@ -656,6 +671,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   /* Reduce Motion: notes fade in one by one, in place, without flying across */
   .board .note { transform: rotate(var(--r)); transition: opacity .5s ease; transition-delay: calc(var(--i, 0) * 120ms); }
   .stack { animation: none !important; }
+  .hero__first, .hero__last, .hero__part { animation: none; }
   .popup[open] { animation: none; }
 }
 
