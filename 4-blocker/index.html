@@ -52,7 +52,6 @@ button,select,input,textarea{font:inherit;color:inherit}
 .btn.primary{font-weight:700}
 .btn.primary:hover{background:#ffffff;border-color:#ffffff}
 .btn:disabled{opacity:.5;cursor:not-allowed}
-#history{background:#ffffff;border-color:#ffffff;color:var(--btn-ink)}
 select.btn option{background:var(--btn);color:var(--btn-ink)}
 .toast{font-size:13px;color:var(--muted);min-height:1em;text-align:center}
 
@@ -150,9 +149,7 @@ textarea#prompt{min-height:140px;resize:vertical;line-height:1.5}
     <span class="wk" id="wkLabel"></span>
   </header>
   <nav class="bar" aria-label="Slide actions">
-    <select class="btn" id="history" aria-label="Past 4-blockers"><option value="">History</option></select>
     <button class="btn" id="newBtn" type="button">New blank</button>
-    <button class="btn" id="saveBtn" type="button">Save to history</button>
     <button class="btn primary" id="pdfBtn" type="button">Save as PDF</button>
   </nav>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -186,25 +183,26 @@ textarea#prompt{min-height:140px;resize:vertical;line-height:1.5}
     <div class="fields">
       <div class="field"><label for="inTitle">4-blocker title</label><input id="inTitle" type="text" placeholder="Project or product name" autocomplete="off"></div>
       <div class="field"><label for="inOwner">Owner</label><input id="inOwner" type="text" placeholder="Who owns this update" autocomplete="off"></div>
-      <div class="field"><label for="inDay">Report day</label><select id="inDay">
+      <div class="field"><label for="inDay">Report day</label><select id="inDay" autocomplete="off">
         <option value="1">Monday</option><option value="2">Tuesday</option><option value="3">Wednesday</option><option value="4">Thursday</option><option value="5">Friday</option><option value="6">Saturday</option><option value="0">Sunday</option>
       </select></div>
-      <div class="field"><label for="inDate">Report date</label><input id="inDate" type="date"></div>
+      <div class="field"><label for="inDate">Report date</label><input id="inDate" type="date" autocomplete="off"></div>
     </div>
   </section>
 
   <section class="panel" aria-labelledby="cTitle">
     <h3 id="cTitle">Build this week's 4-blocker</h3>
     <p class="hint">Paste meeting notes, Jira exports, Confluence pages or email threads, or just describe the week. Claude fills in accomplishments, the next two weeks, risks / issues / decisions, and Jira ticket status. Click anything on the slide to edit it afterwards.</p>
-    <textarea id="prompt" placeholder="Paste meeting notes, emails, Confluence pages or Jira exports, or describe what happened this week."></textarea>
+    <p class="hint">Nothing you enter is saved or shared. Refreshing or closing this page clears everything, so save a PDF before you leave.</p>
+    <textarea id="prompt" autocomplete="off" placeholder="Paste meeting notes, emails, Confluence pages or Jira exports, or describe what happened this week."></textarea>
     <div class="chips" id="fileChips"></div>
     <div class="row">
       <div class="left">
         <label class="drop" id="drop" for="fileIn">Attach files (.docx, .txt, .md, .csv, .json, .vtt, .eml)</label>
         <input type="file" id="fileIn" multiple hidden accept=".docx,.txt,.md,.csv,.json,.vtt,.eml,.html,.htm,.log">
         <div class="mode" role="radiogroup" aria-label="How to apply">
-          <label><input type="radio" name="mode" id="modeReplace" value="replace" checked><span>Replace slide</span></label>
-          <label><input type="radio" name="mode" id="modeMerge" value="merge"><span>Merge into slide</span></label>
+          <label><input type="radio" name="mode" id="modeReplace" value="replace" checked autocomplete="off"><span>Replace slide</span></label>
+          <label><input type="radio" name="mode" id="modeMerge" value="merge" autocomplete="off"><span>Merge into slide</span></label>
         </div>
       </div>
       <div class="right">
@@ -241,7 +239,6 @@ const normKind = k => { const t = String(k||"").toLowerCase(); return t.startsWi
 
 // The weekday this team reports on; remembered per viewer.
 let reportDay = 5;
-try { const v = localStorage.getItem("reportDay"); if (v !== null && /^[0-6]$/.test(v)) reportDay = Number(v); } catch {}
 function nextReportDate(d = new Date()){
   const x = new Date(d); x.setDate(x.getDate() + (reportDay - x.getDay() + 7) % 7);
   return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,"0")}-${String(x.getDate()).padStart(2,"0")}`;
@@ -269,7 +266,6 @@ function jiraLabel(j){
   return "";
 }
 let attachments = [];
-let currentDocId = null;
 
 function toast(msg){ $("toast").textContent = msg; clearTimeout(toast.t); toast.t = setTimeout(()=>{$("toast").textContent=""},5000); }
 
@@ -352,12 +348,13 @@ function jiraControl(){
   num.value = j.left ?? ""; num.hidden = j.status !== "open";
   const lbl = document.createElement("span"); lbl.textContent = "left"; lbl.hidden = num.hidden;
   sel.onchange = () => {
+    dirty();
     j.status = sel.value; sel.className = "jp-" + (j.status || "none");
     if (j.status === "open" && j.left === null) j.left = (state.blocks.jira || []).filter(t => normStatus(t.status) !== "Done").length;
     if (j.status !== "open") j.left = null;
     num.value = j.left ?? ""; num.hidden = lbl.hidden = j.status !== "open";
   };
-  num.oninput = () => { const n = parseInt(num.value, 10); j.left = Number.isFinite(n) && n >= 0 ? n : null; };
+  num.oninput = () => { dirty(); const n = parseInt(num.value, 10); j.left = Number.isFinite(n) && n >= 0 ? n : null; };
   wrap.append(sel, num, lbl);
   return wrap;
 }
@@ -366,14 +363,15 @@ function sevClass(k, it){
   const t = it.tag.toLowerCase();
   return t.startsWith("h") ? " sev-high" : t.startsWith("m") ? " sev-med" : t.startsWith("l") ? " sev-low" : "";
 }
-function dirty(){}
+// True once the slide or notes change, false again after a PDF is saved.
+let unsaved = false;
+function dirty(){ unsaved = true; }
 
 $("inTitle").addEventListener("input", e => { state.project = e.target.value.trim(); dirty(); renderHead(); });
 $("inOwner").addEventListener("input", e => { state.owner = e.target.value.trim(); dirty(); renderHead(); });
 $("inDay").value = String(reportDay);
 $("inDay").addEventListener("change", e => {
   reportDay = Number(e.target.value);
-  try { localStorage.setItem("reportDay", String(reportDay)); } catch {}
   state.weekEnding = nextReportDate(); $("inDate").value = state.weekEnding; dirty(); renderHead();
 });
 $("inDate").addEventListener("change", e => { if (e.target.value){ state.weekEnding = e.target.value; dirty(); renderHead(); } });
@@ -382,7 +380,7 @@ $("inDate").addEventListener("change", e => { if (e.target.value){ state.weekEnd
 $("newBtn").onclick = () => {
   state = {project: state.project, owner: state.owner, weekEnding: nextReportDate(), status:"",
     blocks: emptyBlocks(), jiraProgress: emptyJira(), sources:[], generatedBy:"manual"};
-  currentDocId = null; $("history").value = ""; syncFields(); render(); toast("Started a blank 4-blocker.");
+  syncFields(); render(); toast("Started a blank 4-blocker.");
 };
 
 /* ---------- files ---------- */
@@ -476,9 +474,9 @@ $("genBtn").onclick = async () => {
       generatedBy:"claude"
     };
     state.jiraProgress = cleanJira(r?.jiraProgress, state.blocks.jira);
-    if (!merge) currentDocId = null;
     syncFields(); render();
-    st.textContent = state.project && state.owner ? "Done. Click any line to edit, then save." : "Done. Add the title and owner above, then save.";
+    dirty();
+    st.textContent = state.project && state.owner ? "Done. Click any line to edit, then save as a PDF." : "Done. Add the title and owner above, then save as a PDF.";
   } catch(e){
     const stopped = e?.name === "AbortError";
     st.className = stopped ? "status" : "status err";
@@ -489,46 +487,6 @@ $("genBtn").onclick = async () => {
   }
 };
 $("stopBtn").onclick = () => ctl?.abort();
-
-/* ---------- history (this browser) ---------- */
-const HKEY = "elb.history.v1";
-let historyDocs = [];
-function readHistory(){ try { const v = JSON.parse(localStorage.getItem(HKEY) || "[]"); return Array.isArray(v) ? v : []; } catch { return []; } }
-function writeHistory(list){ try { localStorage.setItem(HKEY, JSON.stringify(list)); return true; } catch { return false; } }
-function renderHistory(){
-  historyDocs = readHistory().sort((a,b) => String(b.weekEnding).localeCompare(String(a.weekEnding)));
-  const sel = $("history"); const cur = currentDocId || "";
-  sel.textContent = "";
-  const o = document.createElement("option"); o.value = ""; o.textContent = historyDocs.length ? `History (${historyDocs.length})` : "History (empty)"; sel.append(o);
-  for (const v of historyDocs){
-    const op = document.createElement("option"); op.value = v.id;
-    op.textContent = `${fmtDate(v.weekEnding)} · ${v.project || "Untitled"}`;
-    sel.append(op);
-  }
-  sel.value = historyDocs.some(d => d.id === cur) ? cur : "";
-}
-function loadDoc(v){
-  v = structuredClone(v);
-  state = {project:v.project||"", owner:v.owner||"", weekEnding:v.weekEnding||nextReportDate(), status:v.status||"",
-    blocks: cleanBlocks(v.blocks), jiraProgress: cleanJira(v.jiraProgress), sources:v.sources||[], generatedBy:v.generatedBy||"manual"};
-  currentDocId = v.id; $("history").value = v.id; syncFields(); render();
-}
-$("history").onchange = e => {
-  const d = historyDocs.find(x => x.id === e.target.value); if (!d) return;
-  loadDoc(d); toast(`Loaded ${fmtDate(state.weekEnding)}.`);
-};
-$("saveBtn").onclick = () => {
-  if (!state.project){ toast("Add a 4-blocker title before saving."); $("inTitle").focus(); return; }
-  const id = currentDocId || `${state.weekEnding}_${slug(state.project)}`;
-  const doc = {
-    id, project: state.project, owner: state.owner, weekEnding: state.weekEnding, status: state.status,
-    blocks: state.blocks, jiraProgress: {status: state.jiraProgress?.status || "", ticketsLeft: state.jiraProgress?.left ?? null},
-    sources: state.sources || [], generatedBy: state.generatedBy || "manual", updatedAt: new Date().toISOString()
-  };
-  const list = readHistory().filter(d => d.id !== id); list.push(doc);
-  if (!writeHistory(list)){ toast("Couldn't save. Your browser may be blocking site storage."); return; }
-  currentDocId = id; renderHistory(); toast("Saved to history in this browser.");
-};
 
 /* ---------- PDF ---------- */
 function buildPdf(){
@@ -607,6 +565,7 @@ $("pdfBtn").onclick = async () => {
     const url = URL.createObjectURL(buildPdf().output("blob"));
     const a = document.createElement("a"); a.href = url; a.download = name; document.body.append(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 10000);
+    unsaved = false;
     toast(`Downloaded ${name}.`);
   } catch {
     toast("Couldn't create the PDF. Try again.");
@@ -614,7 +573,24 @@ $("pdfBtn").onclick = async () => {
 };
 
 /* ---------- boot ---------- */
-syncFields(); render(); renderHistory();
+// Nothing is kept between visits: the slide lives only in this page's memory.
+// Clear what older versions of this page saved in the browser, and undo any
+// form values the browser restores on refresh or when going back to the page.
+try { localStorage.removeItem("elb.history.v1"); localStorage.removeItem("reportDay"); } catch {}
+function resetForm(){
+  $("prompt").value = ""; $("fileIn").value = ""; $("modeReplace").checked = true;
+  $("inDay").value = String(reportDay);
+}
+resetForm(); syncFields(); render();
+window.addEventListener("pageshow", e => { if (e.persisted) location.reload(); });
+$("prompt").addEventListener("input", dirty);
+// Ask before leaving when there's work that hasn't been saved as a PDF.
+// Browsers show their own wording ("Leave site? Changes you made may not be saved").
+window.addEventListener("beforeunload", e => {
+  if (!unsaved && !$("prompt").value.trim() && !attachments.length) return;
+  e.preventDefault();
+  e.returnValue = "";
+});
 
 // Generate needs the server function (api/generate.js), which only runs on Vercel.
 // On a static host like GitHub Pages that path is a 404, so switch Generate off up front.
