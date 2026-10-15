@@ -192,14 +192,14 @@ textarea#prompt{min-height:140px;resize:vertical;line-height:1.5}
 
   <section class="panel" aria-labelledby="cTitle">
     <h3 id="cTitle">Build this week's 4-blocker</h3>
-    <p class="hint">Paste meeting notes, Jira exports, Confluence pages or email threads, or just describe the week. Claude fills in accomplishments, the next two weeks, risks / issues / decisions, and Jira ticket status. Click anything on the slide to edit it afterwards.</p>
+    <p class="hint">Paste meeting notes, Jira exports, Confluence pages or email threads, or just describe the week. The slide is organized into accomplishments, the next two weeks, risks / issues / decisions, and Jira ticket status. Click anything on the slide to edit it.</p>
     <p class="hint">Nothing you enter is saved or shared. Refreshing or closing this page clears everything, so save a PDF before you leave.</p>
     <textarea id="prompt" autocomplete="off" placeholder="Paste meeting notes, emails, Confluence pages or Jira exports, or describe what happened this week."></textarea>
     <div class="chips" id="fileChips"></div>
     <div class="row">
       <div class="left">
-        <label class="drop" id="drop" for="fileIn">Attach files (.docx, .txt, .md, .csv, .json, .vtt, .eml)</label>
-        <input type="file" id="fileIn" multiple hidden accept=".docx,.txt,.md,.csv,.json,.vtt,.eml,.html,.htm,.log">
+        <label class="drop" id="drop" for="fileIn">Attach files (PowerPoint, PDF, Word, text)</label>
+        <input type="file" id="fileIn" multiple hidden accept=".pptx,.pdf,.docx,.txt,.md,.csv,.json,.vtt,.eml,.html,.htm,.log">
         <div class="mode" role="radiogroup" aria-label="How to apply">
           <label><input type="radio" name="mode" id="modeReplace" value="replace" checked autocomplete="off"><span>Replace slide</span></label>
           <label><input type="radio" name="mode" id="modeMerge" value="merge" autocomplete="off"><span>Merge into slide</span></label>
@@ -217,6 +217,8 @@ textarea#prompt{min-height:140px;resize:vertical;line-height:1.5}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
 (() => {
 const $ = id => document.getElementById(id);
@@ -384,9 +386,65 @@ $("newBtn").onclick = () => {
 };
 
 /* ---------- files ---------- */
+// Each reader returns plain text. Older binary formats (.ppt, .doc) aren't supported.
+class FileError extends Error {}
+const DRAWING_NS = "http://schemas.openxmlformats.org/drawingml/2006/main";
+function slideText(xml){
+  const doc = new DOMParser().parseFromString(xml, "application/xml");
+  return [...doc.getElementsByTagNameNS(DRAWING_NS, "p")]
+    .map(p => [...p.getElementsByTagNameNS(DRAWING_NS, "t")].map(t => t.textContent).join(""))
+    .filter(line => line.trim()).join("\n");
+}
+async function readPptx(f){
+  if (!window.JSZip) throw new FileError("The PowerPoint reader didn't load. Reload the page and try again.");
+  const zip = await window.JSZip.loadAsync(await f.arrayBuffer());
+  const num = name => Number(name.match(/(\d+)\.xml$/)[1]);
+  const slides = zip.file(/^ppt\/slides\/slide\d+\.xml$/).sort((a,b) => num(a.name) - num(b.name));
+  const out = [];
+  for (const slide of slides){
+    const n = num(slide.name);
+    let text = slideText(await slide.async("string"));
+    // Speaker notes are linked from the slide's relationships file.
+    const rels = zip.file(`ppt/slides/_rels/slide${n}.xml.rels`);
+    const target = rels && (await rels.async("string")).match(/Target="\.\.\/notesSlides\/(notesSlide\d+\.xml)"/);
+    const notes = target && zip.file(`ppt/notesSlides/${target[1]}`);
+    if (notes){
+      const nt = slideText(await notes.async("string")).replace(/^\d+$/m, "").trim(); // drop the slide-number placeholder
+      if (nt) text += `\nSpeaker notes: ${nt}`;
+    }
+    if (text.trim()) out.push(`Slide ${n}:\n${text}`);
+  }
+  return out.join("\n\n");
+}
+let pdfReady = null;
+function pdfLib(){
+  if (!window.pdfjsLib) throw new FileError("The PDF reader didn't load. Reload the page and try again.");
+  if (!pdfReady){
+    // Load the worker from the CDN through a same-origin blob so browsers allow it.
+    const src = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc = URL.createObjectURL(new Blob([`importScripts("${src}");`], {type:"text/javascript"}));
+    pdfReady = window.pdfjsLib;
+  }
+  return pdfReady;
+}
+async function readPdf(f){
+  const doc = await pdfLib().getDocument({data: new Uint8Array(await f.arrayBuffer())}).promise;
+  const pages = [];
+  for (let i = 1; i <= doc.numPages; i++){
+    const content = await (await doc.getPage(i)).getTextContent();
+    const text = content.items.map(it => it.str + (it.hasEOL ? "\n" : " ")).join("").replace(/[ \t]+\n/g, "\n").trim();
+    if (text) pages.push(`Page ${i}:\n${text}`);
+  }
+  await doc.destroy();
+  if (!pages.length) throw new FileError(`${f.name} has no selectable text. It may be a scanned image.`);
+  return pages.join("\n\n");
+}
 async function readFile(f){
+  if (/\.(ppt|doc)$/i.test(f.name)) throw new FileError(`${f.name} is an older Office format. Save it as .pptx or .docx and attach it again.`);
+  if (/\.pptx$/i.test(f.name)) return readPptx(f);
+  if (/\.pdf$/i.test(f.name)) return readPdf(f);
   if (/\.docx$/i.test(f.name)){
-    if (!window.mammoth) throw new Error("Word reader did not load");
+    if (!window.mammoth) throw new FileError("The Word reader didn't load. Reload the page and try again.");
     return (await window.mammoth.extractRawText({arrayBuffer: await f.arrayBuffer()})).value;
   }
   const txt = await f.text();
@@ -394,8 +452,14 @@ async function readFile(f){
 }
 async function addFiles(list){
   for (const f of list){
-    try { const text = (await readFile(f)).trim(); if (text) attachments.push({name:f.name, text}); else toast(`${f.name} has no readable text.`); }
-    catch { toast(`Couldn't read ${f.name}. Try saving it as .txt or .docx.`); }
+    toast(`Reading ${f.name}…`);
+    try {
+      const text = (await readFile(f)).trim();
+      if (text){ attachments.push({name:f.name, text}); toast(`Added ${f.name}.`); }
+      else toast(`${f.name} has no readable text.`);
+    } catch(err) {
+      toast(err instanceof FileError ? err.message : `Couldn't read ${f.name}. The file may be damaged or password-protected.`);
+    }
   }
   renderChips();
 }
@@ -403,7 +467,7 @@ function renderChips(){
   const c = $("fileChips"); c.textContent = "";
   attachments.forEach((a,i) => {
     const el = document.createElement("span"); el.className="chip";
-    const s = document.createElement("span"); s.textContent = `${a.name} · ${Math.round(a.text.length/100)/10}k chars`;
+    const s = document.createElement("span"); s.textContent = `${a.name} · ${a.text.length < 1000 ? a.text.length : (Math.round(a.text.length/100)/10) + "k"} characters`;
     const x = document.createElement("button"); x.type="button"; x.textContent="×"; x.setAttribute("aria-label",`Remove ${a.name}`);
     x.onclick = () => { attachments.splice(i,1); renderChips(); };
     el.append(s,x); c.append(el);
@@ -435,8 +499,8 @@ function cleanBlocks(src){
 const ERR = {
   rate_limited:"Too many requests right now. Wait a few minutes and try again.",
   too_large:"That's too much text at once. Remove a file or trim the notes.",
-  refused:"Claude declined this input. Remove anything sensitive and try again.",
-  bad_output:"Claude's answer couldn't be read as a slide. Try again.",
+  refused:"This input couldn't be processed. Remove anything sensitive and try again.",
+  bad_output:"The slide couldn't be built from that input. Try again.",
   not_configured:"Generate isn't set up on this site yet (missing API key).",
 };
 $("genBtn").onclick = async () => {
@@ -471,7 +535,7 @@ $("genBtn").onclick = async () => {
       blocks: cleanBlocks(r?.blocks),
       jiraProgress: null,
       sources: Array.isArray(r?.sources) ? r.sources.map(String).filter(Boolean).slice(0,8) : [],
-      generatedBy:"claude"
+      generatedBy:"generated"
     };
     state.jiraProgress = cleanJira(r?.jiraProgress, state.blocks.jira);
     syncFields(); render();
@@ -481,7 +545,7 @@ $("genBtn").onclick = async () => {
     const stopped = e?.name === "AbortError";
     st.className = stopped ? "status" : "status err";
     st.textContent = stopped ? "Stopped." : e?.code === "no_api" ? "Generate only works on the deployed site (Vercel). You can still fill in the slide by hand."
-      : (ERR[e?.code] || "Something went wrong reaching Claude. Try again.");
+      : (ERR[e?.code] || "Something went wrong building the slide. Try again.");
   } finally {
     $("genBtn").disabled = false; $("stopBtn").hidden = true;
   }
@@ -502,13 +566,13 @@ function buildPdf(){
   const tint = (c, a) => c.map((v,k) => Math.round(v*a + bg[k]*(1-a)));
   pdf.setFillColor(...bg); pdf.rect(0,0,W,H,"F");
   // centered title
-  pdf.setTextColor(...ink); pdf.setFont("helvetica","bold"); pdf.setFontSize(26);
+  pdf.setTextColor(...ink); pdf.setFont("times","bold"); pdf.setFontSize(26);
   pdf.text(pdf.splitTextToSize(state.project || "Untitled", 600)[0], W/2, 44, {align:"center"});
-  pdf.setFont("helvetica","normal"); pdf.setFontSize(10.5); pdf.setTextColor(...muted);
+  pdf.setFont("times","normal"); pdf.setFontSize(10.5); pdf.setTextColor(...muted);
   pdf.text(`Report date ${fmtDate(state.weekEnding)}${state.owner ? "     Owner " + state.owner : ""}`, W/2, 64, {align:"center"});
   const rag = RAG[state.status];
   if (rag){
-  pdf.setFont("helvetica","bold"); pdf.setFontSize(9.5);
+  pdf.setFont("times","bold"); pdf.setFontSize(9.5);
   const pw = pdf.getTextWidth(rag.t) + 24, px = W-28-pw;
   pdf.setFillColor(...tint(rag.c,.18)); pdf.roundedRect(px, 30, pw, 21, 10.5, 10.5, "F");
   pdf.setTextColor(...rag.c); pdf.text(rag.t, px+pw/2, 43.5, {align:"center"});
@@ -522,19 +586,19 @@ function buildPdf(){
     const x = (i%2)*cw + 24, y = top + Math.floor(i/2)*ch + 28, maxW = cw - 48;
     pdf.setFillColor(...tint(dot[b.k],.18)); pdf.roundedRect(x, y-13, 18, 18, 5, 5, "F");
     pdf.setFillColor(...dot[b.k]); pdf.circle(x+9, y-4, 3.5, "F");
-    pdf.setTextColor(...ink); pdf.setFont("helvetica","bold"); pdf.setFontSize(12.5);
+    pdf.setTextColor(...ink); pdf.setFont("times","bold"); pdf.setFontSize(12.5);
     pdf.text(b.title, x+26, y);
     const jl = b.k === "jira" ? jiraLabel(state.jiraProgress) : "";
     if (jl && jl !== "Tickets left"){
       const jc = {complete:C.green, na:C.grey, open:C.amber}[state.jiraProgress.status];
-      pdf.setFont("helvetica","bold"); pdf.setFontSize(9.5);
+      pdf.setFont("times","bold"); pdf.setFontSize(9.5);
       const jw = pdf.getTextWidth(jl.toUpperCase()) + 20;
       pdf.setFillColor(...tint(jc,.18)); pdf.roundedRect(x+maxW-jw, y-13, jw, 18, 9, 9, "F");
       pdf.setTextColor(...jc); pdf.text(jl.toUpperCase(), x+maxW-jw/2, y-0.5, {align:"center"});
     }
     let cy = y + 22; const limit = top + Math.floor(i/2)*ch + ch - 10;
     const items = state.blocks[b.k] || [];
-    if (!items.length){ pdf.setFont("helvetica","italic"); pdf.setFontSize(10.5); pdf.setTextColor(...muted); pdf.text("Nothing to report", x, cy); }
+    if (!items.length){ pdf.setFont("times","italic"); pdf.setFontSize(10.5); pdf.setTextColor(...muted); pdf.text("Nothing to report", x, cy); }
     for (const it of items){
       // left label (kind / ticket key) and right label (tag / status)
       let leftW = 14, leftTxt = "", leftC = ink, rightTxt = (it.tag||"").trim(), rightC = muted;
@@ -542,12 +606,12 @@ function buildPdf(){
         if (k !== "decision"){ const t = rightTxt.toLowerCase(); rightC = t.startsWith("h") ? C.red : t.startsWith("m") ? C.amber : t.startsWith("l") ? C.green : muted; } }
       if (b.k === "jira"){ leftTxt = it.key || ""; leftC = ink; leftW = 70; rightTxt = normStatus(it.status).toUpperCase(); rightC = stC[normStatus(it.status)]; }
       pdf.setFont("courier","normal"); pdf.setFontSize(9); const tw = rightTxt ? pdf.getTextWidth(rightTxt) + 12 : 0;
-      pdf.setFont("helvetica","normal"); pdf.setFontSize(11.5);
+      pdf.setFont("times","normal"); pdf.setFontSize(11.5);
       const lines = pdf.splitTextToSize(it.text || "", maxW - leftW - tw);
       if (cy + (lines.length-1)*14 > limit){ pdf.setTextColor(...muted); pdf.setFontSize(9.5); pdf.text("…more items not shown", x+leftW, cy); break; }
       if (leftTxt){ pdf.setFont("courier", b.k === "jira" ? "bold" : "normal"); pdf.setFontSize(8.5); pdf.setTextColor(...leftC); pdf.text(leftTxt, x, cy); }
       else { pdf.setFillColor(...dot[b.k]); pdf.circle(x+3, cy-4, 2, "F"); }
-      pdf.setFont("helvetica","normal"); pdf.setFontSize(11.5); pdf.setTextColor(...ink);
+      pdf.setFont("times","normal"); pdf.setFontSize(11.5); pdf.setTextColor(...ink);
       pdf.text(lines, x+leftW, cy, {lineHeightFactor:1.2});
       if (rightTxt){ pdf.setFont("courier","normal"); pdf.setFontSize(9); pdf.setTextColor(...rightC); pdf.text(rightTxt, x + maxW, cy, {align:"right"}); }
       cy += lines.length*14 + 7;
