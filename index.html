@@ -191,8 +191,25 @@
           </div>
         </article>
 
-        <article class="project project--soon">
+        <article class="project">
           <div class="project__num">4</div>
+          <div class="project__body">
+            <h3>FlowState</h3>
+            <p>Fitness instructors often plan classes in notes and keep time by hand. This web app lets them build a
+              timed class of segments and breaks across any discipline, then run it live with a countdown, notes for
+              each segment and alerts before the next one. Accounts sync programs across devices.</p>
+            <ul class="project__stack">
+              <li>JavaScript</li><li>Firebase</li><li>Claude Code</li>
+            </ul>
+            <div class="project__links">
+              <button class="project__link project__link--btn" type="button" data-opens="flowstate-info" aria-haspopup="dialog">More info</button>
+              <a class="project__link" href="https://sanjanasatish.vercel.app/flowstate/">Try the app →</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project project--soon">
+          <div class="project__num">5</div>
           <div class="project__body">
             <h3>More on the way</h3>
             <p>New side projects and case studies are in progress. Check back soon.</p>
@@ -458,6 +475,29 @@
       <ul class="popup__list">
         <li><b>Workflow Adoption:</b> % of product lines/teams actively using the automated workflow.</li>
         <li><b>User Satisfaction:</b> % of positive feedback (CSAT) on brief accuracy and utility.</li>
+      </ul>
+    </dialog>
+
+    <dialog class="popup" id="flowstate-info" aria-labelledby="flowstate-info-title">
+      <button class="popup__close" type="button" aria-label="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <p class="popup__eyebrow">Project details</p>
+      <h3 class="popup__title" id="flowstate-info-title">FlowState</h3>
+      <h4 class="popup__heading">Customer Problem</h4>
+      <p>Instructors organize class sequences by hand across notes, spreadsheets, fitness smartwatches and multiple apps. While planning, it is hard to see whether the workouts and breaks fit the class length, and painful to reorganize or reuse a plan. While teaching, they are moving, demonstrating and watching students, so they cannot keep checking notes or doing time math.</p>
+      <h4 class="popup__heading">Product Vision</h4>
+      <p>One place to create, organize, edit and run class programs across Pilates, yoga, strength training, barre, cycling, HIIT and other disciplines.</p>
+      <h4 class="popup__heading">Solution</h4>
+      <p>A web app for phone and laptop that shows planned time against class length while instructors build segments and breaks. Start mode then runs the class with a large countdown, the current segment's notes, what's next and an alert before each change. Guests can build and run a class without signing up, and accounts save programs and sync them across devices.</p>
+      <h4 class="popup__heading">Success Metrics</h4>
+      <p>Proposed targets, to be reevaluated after the first beta.</p>
+      <ul class="popup__list">
+        <li><b>Classes Run to Completion:</b> 70% of started classes reach the end.</li>
+        <li><b>New User Activation:</b> 60% of new users build a class and press Start within 7 days.</li>
+        <li><b>Time to Build a Class:</b> median under 5 minutes.</li>
+        <li><b>Week 4 Retention:</b> 30% of activated instructors run a class in week 4.</li>
+        <li><b>Guest to Account Conversion:</b> 25% of guests who build a class create an account.</li>
       </ul>
     </dialog>
   </main>
