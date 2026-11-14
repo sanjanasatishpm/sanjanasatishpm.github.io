@@ -4,6 +4,7 @@ import {
   normalizeLibrary, restoreRun, resumeRun, runView, startCheck, timingStatus,
 } from './core.js';
 import { renderAccount } from './account.js';
+import { renderFaq } from './faq.js';
 import { testAlert, unlockAudio } from './alerts.js';
 import { backend } from './backend.js';
 import { mountPlayer } from './player.js';
@@ -216,7 +217,9 @@ function renderHome() {
   const user = sync.getUser();
   const topBar = h('div', { class: 'home-top' },
     h('p', { class: 'wordmark' }, 'FlowState'),
-    h('a', { class: 'account-link', href: '#/account' }, user ? 'Account' : 'Sign up or sign in'));
+    h('div', { class: 'top-links' },
+      h('a', { class: 'faq-link', href: '#/faq' }, 'FAQ'),
+      h('a', { class: 'account-link', href: '#/account' }, user ? 'Account' : 'Sign up or sign in')));
 
   const header = h('header', { class: 'home-header' },
     h('h1', { class: 'home-title' }, classes.length ? 'Your programs' : 'Plan it. Press start. Teach.'),
@@ -848,6 +851,7 @@ function dropBlankClasses(currentId) {
 
 function parseRoute() {
   if (location.hash === '#/account') return { name: 'account', id: null };
+  if (location.hash === '#/faq') return { name: 'faq', id: null };
   const runMatch = location.hash.match(/^#\/run\/(.+)$/);
   if (runMatch) return { name: 'run', id: decodeURIComponent(runMatch[1]) };
   const classMatch = location.hash.match(/^#\/class\/(.+)$/);
@@ -880,6 +884,11 @@ function render() {
 
   if (route.name === 'account') {
     renderAccount(app, sync);
+    return;
+  }
+
+  if (route.name === 'faq') {
+    renderFaq(app);
     return;
   }
 

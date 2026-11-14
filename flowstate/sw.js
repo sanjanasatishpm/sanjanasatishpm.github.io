@@ -1,6 +1,6 @@
 // Network first, so a pushed update shows on the next load. The cache is only
 // used when the device is offline.
-const CACHE = 'flowstate-v3';
+const CACHE = 'flowstate-v4';
 const FIREBASE_SDK = 'https://www.gstatic.com/firebasejs/';
 const ASSETS = [
   './',
@@ -12,6 +12,7 @@ const ASSETS = [
   'alerts.js',
   'player.js',
   'account.js',
+  'faq.js',
   'backend.js',
   'sync.js',
   'manifest.webmanifest',

@@ -369,6 +369,50 @@ textarea.input { display: block; resize: vertical; }
 .account-email { font-size: 18px; font-weight: 800; overflow-wrap: anywhere; }
 .account-actions { display: flex; flex-wrap: wrap; gap: 10px; }
 
+/* ---------- FAQ ---------- */
+
+.top-links { display: flex; align-items: center; gap: 4px; }
+.faq-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 12px;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.faq {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: calc(var(--safe-top) + 8px) 20px calc(var(--safe-bottom) + 48px);
+}
+.faq-section { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.faq-heading { font-size: 13px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--volt); }
+.faq-item { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.faq-item[open] { border-color: var(--muted); }
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  min-height: 52px;
+  padding: 12px 18px;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+.faq-question::-webkit-details-marker { display: none; }
+.faq-question::after { content: "+"; flex: none; color: var(--volt); font-size: 24px; font-weight: 400; line-height: 1; }
+.faq-item[open] > .faq-question::after { content: "\2212"; }
+.faq-question:focus-visible { outline: 2px solid var(--volt); outline-offset: 2px; border-radius: var(--radius); }
+.faq-answer { display: flex; flex-direction: column; gap: 10px; padding: 0 18px 16px; color: var(--muted); }
+.faq-answer p { max-width: 62ch; }
+
 /* ---------- Editor ---------- */
 
 .editor {
